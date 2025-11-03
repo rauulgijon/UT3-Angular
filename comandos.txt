@@ -1,3 +1,4 @@
 npm run dev -> lanza la app
 ng serve -> lanza el servidor
 npm run build -> hacer un build, construye el proyecto
+ng new proyecto --routing --style=css -> hace un build
