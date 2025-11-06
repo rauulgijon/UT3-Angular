@@ -1,1 +1,238 @@
-<p>jugadores-pages works!</p>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-transparent">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">Liga Deportiva</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="equipos.html">Equipos</a></li>
+          <li class="nav-item"><a class="nav-link" href="resultados.html">Resultados</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navClasif" role="button" data-bs-toggle="dropdown" aria-expanded="false">Clasificaciones</a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navClasif">
+              <li><a class="dropdown-item" href="clasificaciones.html#futbol">Fútbol</a></li>
+              <li><a class="dropdown-item" href="clasificaciones.html#callofduty">Call of Duty</a></li>
+              <li><a class="dropdown-item" href="clasificaciones.html#brawlstars">Brawl Stars</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link active" href="jugadores.html">Jugadores</a></li>
+          <li class="nav-item"><a class="nav-link" href="arbitros.html">Árbitros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registrationModal">Inscripción</a></li>
+          <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Jugadores Destacados</h2>
+    <div class="row justify-content-center">
+
+      <div class="col-md-4 col-lg-3 mb-4">
+        <div class="card player-card h-100">
+          <img src="assets/mbappe_placeholder.webp" class="card-img-top" alt="Kylian Mbappé">
+          <div class="card-body">
+              <h5 class="card-title">Kylian Mbappé</h5>
+              <p class="card-text text-muted">Dorsal: 9</p>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#playerDetailModal">
+                Ver Detalles
+              </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-lg-3 mb-4">
+          <div class="card player-card h-100">
+              <img src="assets/rashford_placeholder.webp" class="card-img-top" alt="Marcus Rashford">
+              <div class="card-body">
+                  <h5 class="card-title">Marcus Rashford</h5>
+                  <p class="card-text text-muted">Dorsal: 7</p>
+                  <a href="#" class="btn btn-primary disabled">Detalles (Próximamente)</a>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-md-4 col-lg-3 mb-4">
+          <div class="card player-card h-100">
+              <img src="assets/courtois_placeholder.webp" class="card-img-top" alt="Thibaut Courtois">
+              <div class="card-body">
+                  <h5 class="card-title">Thibaut Courtois</h5>
+                  <p class="card-text text-muted">Dorsal: 1</p>
+                  <a href="#" class="btn btn-primary disabled">Detalles (Próximamente)</a>
+              </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal fade" id="playerDetailModal" tabindex="-1" aria-labelledby="playerDetailModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="playerDetailModalLabel">Detalles del Jugador</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-4 text-center">
+                <img src="assets/mbappe_placeholder.webp" alt="Foto del jugador" class="img-fluid rounded-circle mb-3 player-modal-img">
+                <h4>Kylian Mbappé</h4>
+                <p class="text-muted">Delantero</p>
+              </div>
+              <div class="col-md-8">
+                <h5>Estadísticas (Temporada Actual)</h5>
+                <ul class="list-group list-group-flush mb-3">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Equipo Actual
+                    <span class="badge bg-primary rounded-pill">Real Madrid CF</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Dorsal
+                    <span class="badge bg-secondary rounded-pill">9</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Partidos Jugados
+                    <span class="badge bg-info rounded-pill">35</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Goles
+                    <span class="badge bg-success rounded-pill">28</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Asistencias
+                    <span class="badge bg-warning text-dark rounded-pill">15</span>
+                  </li>
+                </ul>
+                <h5>Biografía Corta</h5>
+                <p>Kylian Mbappé Lottin es un futbolista francés conocido por su velocidad explosiva, regate y finalización. Considerado uno de los mejores jugadores del mundo, ha ganado múltiples títulos de liga y una Copa del Mundo con Francia.</p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+	<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+	<div id="confirmationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header">
+		<strong class="me-auto" id="toast-title">Notificación</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body" id="toast-body">
+		</div>
+	</div>
+	</div>
+
+	<div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
+		<div class="modal-content">
+		<div class="modal-header bg-dark text-light border-0">
+			<h5 class="modal-title fw-bold" id="registrationModalLabel">Inscripción a la Liga Deportiva</h5>
+			<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body p-0">
+			<div class="row g-0">
+			
+			<div class="col-md-5 d-none d-md-block modal-img-bg" style="background-image: url('assets/inscripcion.webp'); background-size: cover; background-position: center;">
+				<div class="d-flex align-items-center justify-content-center h-100 text-white p-3" style="background-color: rgba(0, 0, 0, 0.4);">
+				<div>
+					<h4 class="text-center fw-bold mb-3">¡Únete a la competición!</h4>
+					<p class="text-center small">Rellena el formulario y registra a tu equipo para la próxima temporada.</p>
+				</div>
+				</div>
+			</div>
+			
+			<div class="col-md-7">
+				<div class="p-4 p-md-5">
+				<h3 class="mb-4 fw-bold">Datos del Equipo</h3>
+				<form id="registration-form">
+					
+					<div class="mb-3 input-group">
+					<span class="input-group-text"><i class="bi bi-joystick"></i></span>
+					<select id="deporte" name="deporte" class="form-select" required>
+						<option value="" selected disabled>Selecciona un deporte...</option>
+						<option value="futbol">Fútbol</option>
+						<option value="callofduty">Call of Duty</option>
+						<option value="brawlstars">Brawl Stars</option>
+					</select>
+					</div>
+
+					<div class="mb-3 input-group">
+					<span class="input-group-text"><i class="bi bi-shield-fill"></i></span>
+					<input type="text" id="nombreEquipo" name="nombreEquipo" class="form-control" placeholder="Nombre del Equipo" required>
+					</div>
+
+					<div class="mb-3 input-group">
+					<span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+					<input type="text" id="nombreCapitan" name="nombreCapitan" class="form-control" placeholder="Nombre del Capitán" required>
+					</div>
+					
+					<div class="mb-3 input-group">
+					<span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+					<input type="email" id="email" name="email" class="form-control" placeholder="Email de contacto" required>
+					</div>
+
+					<div class="mb-3 input-group">
+					<span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+					<input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Teléfono de contacto (Opcional)">
+					</div>
+					
+					<div class="mb-3 input-group">
+					<span class="input-group-text"><i class="bi bi-chat-dots-fill"></i></span>
+					<textarea id="mensaje" name="mensaje" class="form-control" rows="3" placeholder="Comentarios adicionales (opcional)"></textarea>
+					</div>
+					
+					<button type="submit" class="btn btn-primary w-100 btn-lg mt-3">Inscribir Equipo</button>
+				</form>
+				</div>
+			</div>
+			</div>
+		</div>
+		</div>
+	</div>
+	</div>
+
+    <footer class="footer mt-auto bg-dark text-light py-4">
+      <div class="container">
+        <div class="row text-center text-md-start">
+          <div class="col-md-4 mb-3">
+            <h5 class="fw-bold text-uppercase">Liga Deportiva</h5>
+            <p class="small">
+              Noticias, resultados y clasificaciones de las principales ligas deportivas.
+              Tu fuente confiable para el deporte.
+            </p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h6 class="fw-bold text-uppercase mb-2">Contacta con nosotros</h6>
+            <ul class="list-unstyled">
+              <li><p class="mb-1">📧 raulgijon16@gmail.com</p></li>
+              <li><p class="mb-0">📞 +34 692 32 31 87</p></li>
+            </ul>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h6 class="fw-bold text-uppercase mb-2">Síguenos</h6>
+            <div class="social-icons">
+              <a href="https://www.facebook.com/?locale=es_ES" class="me-3"><i class="bi bi-facebook"></i> Facebook</a>
+              <a href="https://twitter.com/?lang=es" class="me-3"><i class="bi bi-twitter"></i> Twitter</a>
+              <a href="https://www.instagram.com/" class="me-3"><i class="bi bi-instagram"></i> Instagram</a>
+              <a href="https://www.youtube.com/" class="me-3"><i class="bi bi-youtube"></i> YouTube</a>
+            </div>
+          </div>
+        <hr class="border-secondary">
+        <div class="text-center small">
+          © 2025 Liga Deportiva. Todos los derechos reservados.
+        </div>
+      </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="js/app.js"></script>
+</body>

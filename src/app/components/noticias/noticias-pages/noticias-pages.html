@@ -1,0 +1,397 @@
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-transparent">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="index.html">Liga Deportiva</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="index.html">Inicio</a></li> 
+        <li class="nav-item"><a class="nav-link" href="equipos.html">Equipos</a></li>
+        <li class="nav-item"><a class="nav-link" href="resultados.html">Resultados</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navClasif" role="button" data-bs-toggle="dropdown" aria-expanded="false">Clasificaciones</a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navClasif">
+            <li><a class="dropdown-item" href="clasificaciones.html#futbol">Fútbol</a></li>
+            <li><a class="dropdown-item" href="clasificaciones.html#callofduty">Call of Duty</a></li>
+            <li><a class="dropdown-item" href="clasificaciones.html#brawlstars">Brawl Stars</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="jugadores.html">Jugadores</a></li>
+        <li class="nav-item"><a class="nav-link" href="arbitros.html">Árbitros</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registrationModal">Inscripción</a></li>
+        <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section id="noticiasSection">
+  <div class="container-fluid p-0">
+    <div class="noticias-row d-flex p-0 m-0">
+      <div class="noticia-card panel panel-futbol" id="noticia-futbol" data-target="#futbolSection" role="button" tabindex="0" aria-label="Ir a noticias de Fútbol">
+        <img class="panel-img" src="assets/imagenfutnot.webp" alt="Fútbol">
+        <div class="panel-overlay"></div>
+        <div class="panel-content">
+          <div class="label-box">
+            <h3 class="panel-title">Fútbol</h3>
+          </div>
+        </div>
+      </div>
+      <div class="noticia-card panel panel-cod" id="noticia-cod" data-target="#codSection" role="button" tabindex="0" aria-label="Ir a noticias de Call of Duty">
+        <img class="panel-img" src="assets/codnot.webp" alt="Call of Duty">
+        <div class="panel-overlay"></div>
+        <div class="panel-content">
+          <div class="label-box">
+            <h3 class="panel-title">Call of Duty</h3>
+          </div>
+        </div>
+      </div>
+      <div class="noticia-card panel panel-brawl" id="noticia-brawl" data-target="#brawlSection" role="button" tabindex="0" aria-label="Ir a noticias de Brawl Stars">
+        <img class="panel-img" src="assets/brawlnot.webp" alt="Brawl Stars">
+        <div class="panel-overlay"></div>
+        <div class="panel-content">
+          <div class="label-box">
+            <h3 class="panel-title">Brawl Stars</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="futbolSection" class="news-section">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="display-4 fw-bold">Noticias de Fútbol</h2>
+      <div class="separator"></div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div id="carouselFutbol" class="carousel slide shadow-lg rounded" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselFutbol" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#carouselFutbol" data-bs-slide-to="1"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="assets/noticiaFut.webp" class="d-block w-100" alt="Noticia Fútbol 1">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Noticias de fútbol</h5>
+                <p>Algunas noticias representativas sobre fútbol.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/noticiaFut2.webp" class="d-block w-100" alt="Noticia Fútbol 2">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Noticias de fútbol</h5>
+                <p>Más noticias relevantes sobre fútbol.</p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselFutbol" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselFutbol" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="news-content bg-light p-4 h-100 rounded shadow-lg">
+          <h3 class="fw-bold mb-4">Últimas Actualizaciones</h3>
+          <div class="news-list">
+            <div class="news-item mb-4">
+              <span class="badge bg-primary mb-2">ÚLTIMA HORA</span>
+              <h4>Final de la Copa del Rey</h4>
+              <p>El Barcelona se proclama campeón en una final histórica</p>
+            </div>
+            <div class="news-item mb-4">
+              <span class="badge bg-success mb-2">FICHAJES</span>
+              <h4>Mercado de Verano</h4>
+              <p>Los movimientos más importantes de la temporada</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="codSection" class="news-section bg-dark text-light py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="display-4 fw-bold">Call of Duty</h2>
+      <div class="separator"></div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="news-content p-4 h-100 rounded shadow-lg">
+          <h3 class="fw-bold mb-4">Novedades del Battle Royale</h3>
+          <div class="news-list">
+            <div class="news-item mb-4">
+              <span class="badge bg-danger mb-2">NUEVO MAPA</span>
+              <h4>Verdansk 2.0</h4>
+              <p>Explora las nuevas localizaciones y mecánicas</p>
+            </div>
+            <div class="news-item">
+              <span class="badge bg-info mb-2">EVENTO</span>
+              <h4>Torneo Mundial</h4>
+              <p>$2 millones en premios para los mejores equipos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div id="carouselCOD" class="carousel slide shadow-lg rounded" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselCOD" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#carouselCOD" data-bs-slide-to="1"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="assets/COD.webp" class="d-block w-100" alt="COD 1">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Noticias de Call of Duty</h5>
+                <p>El nuevo lanzamiento de Call of Duty Black Ops 7 parece tener enamorados a los fanáticos de la saga.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/COD2.webp" class="d-block w-100" alt="COD 2">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Noticias de Call of Duty</h5>
+                <p>Activision elimina el Skill Based Matchmaking tras críticas de los jugadores.</p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselCOD" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselCOD" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="brawlSection" class="news-section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="display-4 fw-bold">Brawl Stars</h2>
+      <div class="separator"></div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div id="carouselBrawlStars" class="carousel slide shadow-lg rounded" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselBrawlStars" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#carouselBrawlStars" data-bs-slide-to="1"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="assets/brawl.webp" class="d-block w-100" alt="Brawl Stars x Subway Surfers">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Brawl Stars x Subway Surfers</h5>
+                <p>¡Corre por las ciudades con los nuevos Subway Supers y desbloquea la skin de Jake Ollie!</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/brawl2.webp" class="d-block w-100" alt="Brawl Stars">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Noticias de Brawl Stars</h5>
+                <p>Nuevos cambios de balance que podrían cambiar drásticamente el meta del juego.</p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselBrawlStars" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselBrawlStars" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="news-content bg-primary text-light p-4 h-100 rounded shadow-lg">
+          <h3 class="fw-bold mb-4">Actualizaciones del Juego</h3>
+          <div class="news-list">
+            <div class="news-item mb-4">
+              <span class="badge bg-warning text-dark mb-2">NUEVO BRAWLER</span>
+              <h4>¡Llega Sam!</h4>
+              <p>Descubre las habilidades del nuevo luchador legendario</p>
+            </div>
+            <div class="news-item">
+              <span class="badge bg-info mb-2">TEMPORADA</span>
+              <h4>Pase de Batalla</h4>
+              <p>Nuevas recompensas y desafíos disponibles</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimoniosSection" class="py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="display-4 fw-bold">Opiniones de la Liga</h2>
+      <div class="separator"></div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 mb-4">
+        <div class="testimonial-card card h-100 shadow-sm border-0">
+          <div class="card-body text-center">
+            <i class="bi bi-quote fs-1 text-primary"></i>
+            <p class="card-text fst-italic my-3">"La mejor liga en la que he participado. La organización es impecable y el nivel de competición es altísimo."</p>
+            <h5 class="card-title fw-bold">Juan Pérez</h5>
+            <p class="card-subtitle text-muted">Capitán, "Furias FC"</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 mb-4">
+        <div class="testimonial-card card h-100 shadow-sm border-0">
+          <div class="card-body text-center">
+            <i class="bi bi-quote fs-1 text-primary"></i>
+            <p class="card-text fst-italic my-3">"Increíble la cobertura de los eSports. ¡Es genial poder seguir los resultados de CoD y Brawl Stars en la misma web!"</p>
+            <h5 class="card-title fw-bold">Ana Gómez</h5>
+            <p class="card-subtitle text-muted">Jugadora, "Toxic Squad"</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 mb-4">
+        <div class="testimonial-card card h-100 shadow-sm border-0">
+          <div class="card-body text-center">
+            <i class="bi bi-quote fs-1 text-primary"></i>
+            <p class="card-text fst-italic my-3">"El sitio web es rápido, fácil de navegar y siempre está actualizado. ¡Un 10 de 10!"</p>
+            <h5 class="card-title fw-bold">Carlos Ruiz</h5>
+            <p class="card-subtitle text-muted">Aficionado</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+  <div id="confirmationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto" id="toast-title">Notificación</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="toast-body">
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-light border-0">
+        <h5 class="modal-title fw-bold" id="registrationModalLabel">Inscripción a la Liga Deportiva</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="row g-0">
+          
+          <div class="col-md-5 d-none d-md-block modal-img-bg" style="background-image: url('assets/inscripcion.webp'); background-size: cover; background-position: center;">
+            <div class="d-flex align-items-center justify-content-center h-100 text-white p-3" style="background-color: rgba(0, 0, 0, 0.4);">
+              <div>
+                <h4 class="text-center fw-bold mb-3">¡Únete a la competición!</h4>
+                <p class="text-center small">Rellena el formulario y registra a tu equipo para la próxima temporada.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-7">
+            <div class="p-4 p-md-5">
+              <h3 class="mb-4 fw-bold">Datos del Equipo</h3>
+              <form id="registration-form">
+                
+                <div class="mb-3 input-group">
+                  <span class="input-group-text"><i class="bi bi-joystick"></i></span>
+                  <select id="deporte" name="deporte" class="form-select" required>
+                    <option value="" selected disabled>Selecciona un deporte...</option>
+                    <option value="futbol">Fútbol</option>
+                    <option value="callofduty">Call of Duty</option>
+                    <option value="brawlstars">Brawl Stars</option>
+                  </select>
+                </div>
+
+                <div class="mb-3 input-group">
+                  <span class="input-group-text"><i class="bi bi-shield-fill"></i></span>
+                  <input type="text" id="nombreEquipo" name="nombreEquipo" class="form-control" placeholder="Nombre del Equipo" required>
+                </div>
+
+                <div class="mb-3 input-group">
+                  <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                  <input type="text" id="nombreCapitan" name="nombreCapitan" class="form-control" placeholder="Nombre del Capitán" required>
+                </div>
+                
+                <div class="mb-3 input-group">
+                  <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                  <input type="email" id="email" name="email" class="form-control" placeholder="Email de contacto" required>
+                </div>
+
+                <div class="mb-3 input-group">
+                  <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+                  <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Teléfono de contacto (Opcional)">
+                </div>
+                
+                <div class="mb-3 input-group">
+                  <span class="input-group-text"><i class="bi bi-chat-dots-fill"></i></span>
+                  <textarea id="mensaje" name="mensaje" class="form-control" rows="3" placeholder="Comentarios adicionales (opcional)"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100 btn-lg mt-3">Inscribir Equipo</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="footer mt-auto bg-dark text-light py-4">
+  <div class="container">
+    <div class="row text-center text-md-start">
+      <div class="col-md-4 mb-3">
+        <h5 class="fw-bold text-uppercase">Liga Deportiva</h5>
+        <p class="small">
+          Noticias, resultados y clasificaciones de las principales ligas deportivas.
+          Tu fuente confiable para el deporte.
+        </p>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase mb-2">Contacta con nosotros</h6>
+        <ul class="list-unstyled">
+          <li><p class="mb-1">📧 raulgijon16@gmail.com</p></li>
+          <li><p class="mb-0">📞 +34 692 32 31 87</p></li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase mb-2">Síguenos</h6>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/?locale=es_ES" class="me-3"><i class="bi bi-facebook"></i> Facebook</a>
+          <a href="https://twitter.com/?lang=es" class="me-3"><i class="bi bi-twitter"></i> Twitter</a>
+          <a href="https://www.instagram.com/" class="me-3"><i class="bi bi-instagram"></i> Instagram</a>
+          <a href="https://www.youtube.com/" class="me-3"><i class="bi bi-youtube"></i> YouTube</a>
+        </div>
+      </div>
+    <hr class="border-secondary">
+    <div class="text-center small">
+      © 2025 Liga Deportiva. Todos los derechos reservados.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="js/app.js"></script>
+</body>
