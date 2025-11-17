@@ -1,15 +1,14 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
-import { ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
+import { AuthService } from "../../core/services/auth.service";
+import { HttpClientModule } from "@angular/common/http";
+
 @Component({
   selector: "app-login",
   templateUrl: "./login.html",
   styleUrls: ["./login.scss"],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   standalone: true
 })
 
@@ -17,9 +16,14 @@ export class LoginComponent {
   username: string = "";
   password: string = "";
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private authService: AuthService) {}
 
-  onLogin() {
+  login() {
     // LÓGICA necearia para autenticar al usario
+    console.log("Intentando iniciar sesión con:", this.username, this.password);
+    this.authService.login(this.username, this.password).subscribe({
+      next: res => console.log("Inicio de sesión exitoso:", res),
+      error: err => console.error("Error al iniciar sesión:", err)
+    });
   }
 }
