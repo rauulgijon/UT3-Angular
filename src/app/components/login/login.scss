@@ -1,32 +1,73 @@
-// le damos estilo a la página de login
-body {
+.auth-container {
+  background: #e7e7e7;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f0f0f0;
+  padding: 20px;
   font-family: Arial, sans-serif;
 }
-.login-container {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-}
-.login-container h2 {
-  margin-bottom: 1.5rem;
+
+.card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 14px;
+  width: 340px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
   text-align: center;
+
+  h2 {
+    margin-bottom: 25px;
+  }
 }
-.login-container label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
+
+.input-group {
+  text-align: left;
+  margin-bottom: 18px;
+
+  label {
+    font-size: 14px;
+    margin-bottom: 4px;
+    display: block;
+    color: #333;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    transition: border 0.2s;
+
+    &:focus {
+      border-color: #ff4d4d;
+    }
+  }
 }
-.login-container input {
+
+.btn {
   width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px;
+  background: #ff4d4d;
+  border: none;
+  border-radius: 22px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.link {
+  display: inline-block;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #3a7bff;
+  cursor: pointer;
+  text-decoration: none;
 }

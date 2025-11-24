@@ -1,15 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http'; // Importar withFetch
 import { App } from './app/app';
 import { routes } from './app/app.routes';
 import 'zone.js';
-import { RegistroComponent } from './app/components/registro/registro';
-import { LoginComponent } from './app/components/login/login';
 
 bootstrapApplication(App, {
   providers: [
     provideRouter(routes),
-    provideHttpClient()
+    provideHttpClient(withFetch()) // Añadir withFetch() aquí también
   ]
 }).catch(err => console.error(err));

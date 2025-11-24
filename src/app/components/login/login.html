@@ -1,7 +1,19 @@
-<div class="login-container">
-    <h1>Inicia sesión</h1>
-    <input type="text" placeholder="Usuario" [(ngModel)]="username" />
-    <input type="password" placeholder="Contraseña" [(ngModel)]="password" />
-    <button (click)="login()">Entrar</button>
-    <a href="/registro">¿No tienes cuenta? Regístrate</a>
+<div class="auth-container">
+    <div class="card">
+        <h2>Inicia sesión</h2>
+
+        <div class="input-group">
+            <label>Usuario</label>
+            <input type="text" placeholder="Usuario" [(ngModel)]="username" />
+        </div>
+
+        <div class="input-group">
+            <label>Contraseña</label>
+            <input type="password" placeholder="Contraseña" [(ngModel)]="password" />
+        </div>
+
+        <button class="btn" (click)="login()">Entrar</button>
+
+        <a class="link" href="/registro">¿No tienes cuenta? Regístrate</a>
+    </div>
 </div>
