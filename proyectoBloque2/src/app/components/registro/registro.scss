@@ -1,0 +1,89 @@
+/* Estilos generales para ambos contenedores */
+.login-container, 
+.registro-container {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  width: 100%;
+  max-width: 400px; /* Ancho máximo para que no se estire demasiado */
+  margin: 2rem auto; /* Centrado horizontal */
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Títulos */
+.login-container h2, 
+.registro-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+/* Inputs (Campos de texto) */
+.login-container input, 
+.registro-container input {
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+/* Efecto al hacer clic en el input */
+.login-container input:focus, 
+.registro-container input:focus {
+  border-color: #007bff; /* Color azul al escribir */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Botones */
+.login-container button, 
+.registro-container button {
+  padding: 12px;
+  background-color: #007bff; /* Color principal */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s;
+  margin-bottom: 15px;
+}
+
+/* Efecto hover del botón */
+.login-container button:hover, 
+.registro-container button:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+}
+
+.login-container button:active, 
+.registro-container button:active {
+  transform: scale(0.98); /* Pequeño efecto de pulsación */
+}
+
+/* Enlaces y texto inferior */
+.login-container a, 
+.registro-container a,
+.registro-container {
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.registro-container a {
+  color: #007bff;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.login-container a:hover, 
+.registro-container a:hover {
+  text-decoration: underline;
+}

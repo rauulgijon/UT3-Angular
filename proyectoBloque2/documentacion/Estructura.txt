@@ -1,0 +1,34 @@
+node_modules         angular.json          public          src    <-- Archivos mas importantes
+
+node y angular.json estan conectados
+
+angular.json : contiene las rutas a las dependencias
+
+al hacer un install todas las dependencias se quedan INSTALADAS LOCALMENTE en el ordenador guardadas en node_modules
+
+public: contiene los archivos multimedia
+
+src:
+app        index.html        main.ts        server.ts  
+
+
+app: todo el codigo de nuestro programa
+
+index.html: pagina principal
+
+main.ts: lanza el archivo, es el compilador, necesario para que el archivo funcione
+
+server.ts: desde aqui se hacede al servidor, bbdd o cualquier elemento externo que almacene informacion
+
+
+app:
+
+core: contiene las carpetas-> model y services
+        model: arbitros.ts -> Nombre, fecha, experiencia
+
+        services: arbitros.ts -> conexion a la base de datos 
+
+
+shared:contiene el -> Footer, header, navbar
+
+component: Una caroeta por cada componente que tenga en la bbdd

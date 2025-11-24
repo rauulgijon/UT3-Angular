@@ -1,0 +1,38 @@
+Jugadores
+- Codigo
+- Nombre
+- Equipo
+- Dorsal
+- Posicion
+- Edad
+- Nacionalidad
+- Img_jugador
+
+Equipos
+- Codigo
+- Nombre
+- Pais
+- Liga
+- Num jugadores
+- Img_escudo
+
+Arbitros
+- Codigo
+- Nombre
+- Partidos arbitrados
+- Nacionalidad
+
+Partidos
+- Codigo
+- Equipo_local
+- Equipo_visitante
+- Arbitro
+- Resultado
+- Liga
+- Estadio
+- Pais
+
+Liga 
+- Codigo
+- Deporte
+- Nivel (nacional/internacional)

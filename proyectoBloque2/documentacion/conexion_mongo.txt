@@ -1,0 +1,10 @@
+1. Intalar las dependencias
+npm install express mongoose cors dotenv
+
+2. server.js
+
+3. Crear el .env
+
+4. Iniciar servidor
+node server.js
+(Se deveria ver Conectado a mongo y servidor corriendo en...)

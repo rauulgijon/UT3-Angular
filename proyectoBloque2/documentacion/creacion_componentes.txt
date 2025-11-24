@@ -1,0 +1,9 @@
+1. Crear el servicio app/core/services/... y el modelo app/core/models
+
+2. Asegurarse de que HttpClientModule esté importado en tu app.module.ts  o core-module.ts
+
+3. Crear el componente(html, scssy ts)
+
+4. Agregar la ruta en app.routes.ts
+
+5. Iniciar backend (node server.js) y angular (ngserve) y abrir localhost:4200

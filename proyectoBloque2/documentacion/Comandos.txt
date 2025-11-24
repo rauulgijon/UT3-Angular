@@ -1,0 +1,17 @@
+Crear proyecto: ng new Nombreproyecto
+
+Lanzar servidor: ng serve (Siempre desde la carpeta servidora)
+
+Lanza aplicacion: npm run dev
+
+Crear Build
+ng new proyectoBloque2 --routing --style=scss
+
+Instralar dependencias:
+npm run build 
+
+Creacion de modulos de componentes: ng g module components/contacto
+
+Creacion componentes : ng g component components/contacto/contacto-pages
+
+npm install express mongoose cors dotenv
