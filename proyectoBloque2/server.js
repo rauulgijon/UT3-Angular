@@ -53,6 +53,10 @@ app.post("/api/registro", async (peticion, respuesta) => {
 
   }catch (error) {
     console.error("Error al registrar usuario:", error);
+    respuesta.status(500).json({ 
+        mensaje: "Error al registrar el usuario", 
+        error: error.message 
+    });
   }
 });
 
