@@ -25,24 +25,15 @@ export class LoginComponent {
       next: (res) => {
         console.log("Inicio de sesión exitoso:", res);
         
-        if (res && res.user && res.user.rol) {
-            // Guardar sesión (opcional pero recomendado)
-            localStorage.setItem('user', JSON.stringify(res.user));
-
-            // Redirigir según el rol recibido del backend
-            switch(res.user.rol) {
-                case 'admin':
-                    this.router.navigate(['/admin']); // Coincide con path: 'admin'
-                    break;
-                case 'jugador':
-                    this.router.navigate(['/jugador']); // Coincide con path: 'jugador'
-                    break;
-                case 'arbitro':
-                    this.router.navigate(['/arbitro']); // Coincide con path: 'arbitro'
-                    break;
-                default:
-                    console.error("Rol desconocido:", res.user.rol);
-            }
+        if (res.user && res.user.rol === 'admin'){
+            this.router.navigate(['/admin']);
+        } else if (res.user && res.user.rol === 'arbitro'){
+            this.router.navigate(['/arbitro']);
+        }
+        else if (res.user && res.user.rol === 'jugador') {
+            this.router.navigate(['/jugador']);
+        } else {
+            console.error('Rol no reconocido o usuario no encontrado');
         }
       },
       error: (err) => {

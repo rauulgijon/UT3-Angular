@@ -1,16 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { LoginComponent } from './app/components/login/login';
-import { RegistroComponent } from './app/components/registro/registro';
-import {routes} from './app/app.routes';
 import { App } from './app/app';
-import 'zone.js'; 
+import { appConfig } from './app/app.config'; // Importamos la configuración buena
 
-
-bootstrapApplication(App, {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient()
-  ]
-}).catch(err => console.error(err));
+// Usamos appConfig en lugar de escribir los providers a mano
+bootstrapApplication(App, appConfig)
+  .catch(err => console.error(err));
