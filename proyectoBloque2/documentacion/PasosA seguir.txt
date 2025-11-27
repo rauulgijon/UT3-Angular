@@ -1,10 +1,9 @@
 1.- Crear el Html y Css
 
-2.- Creamos el @Componente en el .ts y luego en la parte de export creamos 
-    las variabvles que vamos a tenes en el html y el constructor
+2.- AuthServices -> Modelo
 
-3.- Creamos las funcion si se tiene con algun boton
+3.- server.js
 
-4.- Nos dara un erroe porque no esta registrado en el AuthServices por lo que tendremos que registrarlo en el.
+4.- app.routes
 
-5.- Vamos al server.js para crear la ruta que necesitamos
+5.- Ejecutar y probar

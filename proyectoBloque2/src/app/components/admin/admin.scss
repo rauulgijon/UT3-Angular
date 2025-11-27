@@ -1,0 +1,67 @@
+// Variables de color
+$primary: #3b82f6; // Azul moderno
+$primary-hover: #2563eb;
+$bg-color: #f3f4f6;
+$text-color: #111827;
+
+// Contenedor principal
+.admin-container {
+  // Flexbox para centrar H y V
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Centrado vertical
+  align-items: center;     // Centrado horizontal
+  
+  // Ocupar toda la pantalla
+  min-height: 100vh;
+  width: 100%;
+  background-color: $bg-color;
+  font-family: sans-serif; // O tu fuente preferida
+
+  h1 {
+    margin-bottom: 2.5rem; // Separación del título
+    color: $text-color;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+  }
+}
+
+// Contenedor de los botones
+.admin-buttons {
+  display: flex;
+  flex-direction: row; // En fila (horizontal)
+  flex-wrap: wrap;     // Si no caben, bajan de línea
+  gap: 1.5rem;         // Espacio entre botones
+  justify-content: center;
+}
+
+// Estilo del botón individual
+.admin-button {
+  // Estética
+  background-color: $primary;
+  color: white;
+  padding: 1rem 2rem; // Tamaño del botón
+  border-radius: 8px; // Bordes redondeados
+  font-size: 1rem;
+  font-weight: 600;
+  
+  // Importante para resetear el estilo por defecto de <button>
+  border: none;
+  outline: none;
+  cursor: pointer; // Manita al pasar el ratón
+  
+  // Transiciones suaves
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: $primary-hover;
+    transform: translateY(-2px); // Efecto de elevación
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0); // Efecto de presionar
+  }
+}
