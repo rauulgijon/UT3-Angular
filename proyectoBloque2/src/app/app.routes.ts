@@ -4,8 +4,8 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login';
 import { RegistroComponent } from './components/registro/registro';
 import { AdminComponent } from './components/admin/admin';
-    import { UsuariosAdminComponent } from './components/admin/usuariosAdmin';
-    import { ArbitrosAdminComponent } from './components/admin/arbitrosAdmin';
+    import { UsuariosAdminComponent } from './components/admin/usuariosAdmin/usuariosAdmin';
+    import { ArbitrosAdminComponent } from './components/admin/arbitrosAdmin/arbitrosAdmin';
 import { ArbitroComponent } from './components/arbitro/arbitro';
 import { JugadorComponent } from './components/jugador/jugador';
 

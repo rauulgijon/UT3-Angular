@@ -1,1 +1,66 @@
-<h1>Administrar Usuarios</h1>
+<div class="admin-panel">
+    <div class="header-row">
+        <h1>Gestión de Usuarios</h1>
+        <a href="/admin" class="btn-back">⬅ Volver al Panel</a>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <input type="text" placeholder="Buscar usuario...">
+        </div>
+        
+        <button class="btn-add">
+            + Nuevo Usuario
+        </button>
+    </div>
+
+    <div class="form-container">
+        <h3>Datos del usuario</h3>
+        <div class="form-grid">
+            <input type="text" placeholder="Nombre de usuario">
+            <input type="email" placeholder="Email">
+            <input type="password" placeholder="Contraseña">
+            
+            <select>
+                <option value="jugador">Jugador</option>
+                <option value="arbitro">Árbitro</option>
+                <option value="admin">Admin</option>
+            </select>
+            
+            <button class="btn-save">Guardar</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>admin_prueba</td>
+                    <td>admin@test.com</td>
+                    <td><span class="badge admin">ADMIN</span></td>
+                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
+                </tr>
+                <tr>
+                    <td>pepe_jugador</td>
+                    <td>pepe@test.com</td>
+                    <td><span class="badge jugador">JUGADOR</span></td>
+                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
+                </tr>
+                <tr>
+                    <td>arbitro_1</td>
+                    <td>ref@test.com</td>
+                    <td><span class="badge arbitro">ARBITRO</span></td>
+                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
