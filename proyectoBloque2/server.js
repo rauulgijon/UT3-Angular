@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import Usuario from "./src/app/core/models/User.js";
+import Admin from "./src/app/core/models/Admin.js";
+import Arbitro from "./src/app/core/models/Arbitro.js";
 
 dotenv.config();
 const app = express();
