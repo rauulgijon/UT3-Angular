@@ -6,28 +6,31 @@
 
     <div class="toolbar">
         <div class="search-box">
-            <input type="text" placeholder="Buscar usuario...">
+            <input type="text" 
+                   [(ngModel)]="busqueda" 
+                   (input)="filtrar()" 
+                   placeholder="Buscar usuario...">
         </div>
         
-        <button class="btn-add">
-            + Nuevo Usuario
+        <button class="btn-add" (click)="mostrarFormulario = !mostrarFormulario">
+            {{ mostrarFormulario ? 'Cancelar' : '+ Nuevo Usuario' }}
         </button>
     </div>
 
-    <div class="form-container">
+    <div class="form-container" *ngIf="mostrarFormulario">
         <h3>Datos del usuario</h3>
         <div class="form-grid">
-            <input type="text" placeholder="Nombre de usuario">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Contraseña">
+            <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Nombre de usuario">
+            <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Email">
+            <input type="password" [(ngModel)]="nuevoUsuario.password" placeholder="Contraseña">
             
-            <select>
+            <select [(ngModel)]="nuevoUsuario.rol">
                 <option value="jugador">Jugador</option>
                 <option value="arbitro">Árbitro</option>
                 <option value="admin">Admin</option>
             </select>
             
-            <button class="btn-save">Guardar</button>
+            <button class="btn-save" (click)="guardar()">Guardar</button>
         </div>
     </div>
 
@@ -42,23 +45,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>admin_prueba</td>
-                    <td>admin@test.com</td>
-                    <td><span class="badge admin">ADMIN</span></td>
-                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
+                <tr *ngFor="let user of usuariosFiltrados">
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span class="badge" [ngClass]="user.rol">
+                            {{ user.rol | uppercase }}
+                        </span>
+                    </td>
+                    <td style="text-align: center;">
+                        <button class="btn-delete" (click)="borrar(user._id)">🗑️</button>
+                    </td>
                 </tr>
-                <tr>
-                    <td>pepe_jugador</td>
-                    <td>pepe@test.com</td>
-                    <td><span class="badge jugador">JUGADOR</span></td>
-                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
-                </tr>
-                <tr>
-                    <td>arbitro_1</td>
-                    <td>ref@test.com</td>
-                    <td><span class="badge arbitro">ARBITRO</span></td>
-                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
+
+                <tr *ngIf="usuariosFiltrados.length === 0">
+                    <td colspan="4" style="text-align: center; padding: 20px; color: #666;">
+                        No se encontraron usuarios.
+                    </td>
                 </tr>
             </tbody>
         </table>
