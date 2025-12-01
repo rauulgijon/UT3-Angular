@@ -6,19 +6,15 @@
 
     <div class="toolbar">
         <div class="search-box">
-            <input type="text" 
-                   [(ngModel)]="busqueda" 
-                   (input)="filtrar()" 
-                   placeholder="Buscar usuario...">
+            <input type="text" [(ngModel)]="busqueda" (input)="filtrar()" placeholder="Buscar usuario...">
         </div>
-        
         <button class="btn-add" (click)="mostrarFormulario = !mostrarFormulario">
             {{ mostrarFormulario ? 'Cancelar' : '+ Nuevo Usuario' }}
         </button>
     </div>
 
     <div class="form-container" *ngIf="mostrarFormulario">
-        <h3>Datos del usuario</h3>
+        <h3>Datos del nuevo usuario</h3>
         <div class="form-grid">
             <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Nombre de usuario">
             <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Email">
@@ -29,6 +25,20 @@
                 <option value="arbitro">Árbitro</option>
                 <option value="admin">Admin</option>
             </select>
+
+            <ng-container *ngIf="nuevoUsuario.rol === 'arbitro' || nuevoUsuario.rol === 'jugador'">
+                <select [(ngModel)]="nuevoUsuario.deporte">
+                    <option value="" disabled selected>Selecciona Deporte</option>
+                    <option value="futbol">Fútbol</option>
+                    <option value="baloncesto">Baloncesto</option>
+                    <option value="tenis">Tenis</option>
+                </select>
+            </ng-container>
+
+            <ng-container *ngIf="nuevoUsuario.rol === 'arbitro'">
+                <input type="text" [(ngModel)]="nuevoUsuario.dni" placeholder="DNI">
+                <input type="text" [(ngModel)]="nuevoUsuario.telefono" placeholder="Teléfono">
+            </ng-container>
             
             <button class="btn-save" (click)="guardar()">Guardar</button>
         </div>
@@ -41,6 +51,7 @@
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Rol</th>
+                    <th>Deporte</th> <th>Detalles Extra</th>
                     <th style="text-align: center;">Acciones</th>
                 </tr>
             </thead>
@@ -49,18 +60,23 @@
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     <td>
-                        <span class="badge" [ngClass]="user.rol">
-                            {{ user.rol | uppercase }}
-                        </span>
+                        <span class="badge" [ngClass]="user.rol">{{ user.rol | uppercase }}</span>
                     </td>
+                    
+                    <td>
+                        <span *ngIf="user.deporte">{{ user.deporte | titlecase }}</span>
+                        <span *ngIf="!user.deporte" style="color: #ccc;">-</span>
+                    </td>
+
+                    <td>
+                        <small *ngIf="user.rol === 'arbitro' && user.dni">
+                            DNI: {{ user.dni }}
+                        </small>
+                        <span *ngIf="user.rol !== 'arbitro'" style="color: #ccc;">-</span>
+                    </td>
+
                     <td style="text-align: center;">
                         <button class="btn-delete" (click)="borrar(user._id)">🗑️</button>
-                    </td>
-                </tr>
-
-                <tr *ngIf="usuariosFiltrados.length === 0">
-                    <td colspan="4" style="text-align: center; padding: 20px; color: #666;">
-                        No se encontraron usuarios.
                     </td>
                 </tr>
             </tbody>
