@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 
-// Importamos los modelos (Asegúrate de que las rutas sean correctas)
+// Importamos los modelos
 import Usuario from "./src/app/core/models/User.js";
 import Arbitro from "./src/app/core/models/Arbitro.js";
 
@@ -43,7 +43,6 @@ app.post("/api/login", async (req, res) => {
 
 // Registro (Sirve para crear usuarios desde el admin también)
 app.post("/api/registro", async (req, res) => {
-  // 1. Recibimos TODOS los datos posibles
   const { username, password, email, rol, dni, deporte, telefono } = req.body;
   
   try {
@@ -52,7 +51,6 @@ app.post("/api/registro", async (req, res) => {
       password,
       email,
       rol: rol || 'jugador',
-      // 2. Guardamos los datos extra (si vienen vacíos, se guardan vacíos)
       dni,
       deporte,
       telefono
@@ -91,23 +89,24 @@ app.delete("/api/usuarios/:id", async (req, res) => {
 });
 
 // ----------------------------------------------------
-// RUTAS DE GESTIÓN DE ÁRBITROS
+// RUTAS DE GESTIÓN DE ÁRBITROS (CORREGIDO)
 // ----------------------------------------------------
 
-// Obtener todos los árbitros
+// Obtener usuarios que sean Árbitros
 app.get("/api/arbitros", async (req, res) => {
   try {
-    const listaArbitros = await Arbitro.find();
+    // Buscamos en el modelo Usuario, filtrando por rol 'arbitro'
+    const listaArbitros = await Usuario.find({ rol: 'arbitro' });
     res.json(listaArbitros);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener árbitros" });
   }
 });
 
-// Eliminar un árbitro
+// Eliminar un árbitro (usamos el modelo Usuario)
 app.delete("/api/arbitros/:id", async (req, res) => {
   try {
-    await Arbitro.findByIdAndDelete(req.params.id);
+    await Usuario.findByIdAndDelete(req.params.id);
     res.json({ message: "Árbitro eliminado" });
   } catch (error) {
     res.status(500).json({ message: "Error al eliminar árbitro" });

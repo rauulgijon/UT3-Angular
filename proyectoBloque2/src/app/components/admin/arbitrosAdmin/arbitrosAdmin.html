@@ -4,30 +4,21 @@
         <a href="/admin" class="btn-back">⬅ Volver al Panel</a>
     </div>
 
-    <div class="toolbar">
-        <div class="search-box">
-            <input type="text" placeholder="Buscar árbitro...">
-        </div>
-        
-        <button class="btn-add">
-            + Nuevo Árbitro
-        </button>
-    </div>
-
     <div class="form-container">
-        <h3>Datos del Árbitro</h3>
+        <h3>Nuevo Árbitro</h3>
         <div class="form-grid">
-            <input type="text" placeholder="Nombre de usuario">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Contraseña">
-            <input type="text" placeholder="DNI">
-            <input type="text" placeholder="Teléfono">
-            <select>
+            <input type="text" [(ngModel)]="nuevoArbitro.username" placeholder="Nombre de usuario">
+            <input type="email" [(ngModel)]="nuevoArbitro.email" placeholder="Email">
+            <input type="password" [(ngModel)]="nuevoArbitro.password" placeholder="Contraseña">
+            
+            <select [(ngModel)]="nuevoArbitro.deporte">
                 <option value="" disabled selected>Selecciona Deporte</option>
                 <option value="futbol">Fútbol</option>
                 <option value="baloncesto">Baloncesto</option>
+                <option value="tenis">Tenis</option>
             </select>
-            <button class="btn-save">Guardar</button>
+            
+            <button class="btn-save" (click)="guardar()">Guardar</button>
         </div>
     </div>
 
@@ -37,27 +28,24 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Email</th>
-                    <th>DNI</th>
                     <th>Deporte</th>
                     <th style="text-align: center;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Mateu_Lahoz</td>
-                    <td>mateu@laliga.es</td>
-                    <td>12345678A</td>
-                    <td>Fútbol</td>
-                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
-                </tr>
-                <tr>
-                    <td>Arbitro_Basket</td>
-                    <td>ref@basket.com</td>
-                    <td>87654321B</td>
-                    <td>Baloncesto</td>
-                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
+                <tr *ngFor="let arbitro of listaArbitros">
+                    <td style="font-weight: bold;">{{ arbitro.username }}</td>
+                    <td>{{ arbitro.email }}</td>
+                    <td>{{ arbitro.deporte | titlecase }}</td>
+                    <td style="text-align: center;">
+                        <button class="btn-delete" (click)="borrar(arbitro._id)">🗑️</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
+        
+        <p *ngIf="listaArbitros.length === 0" style="text-align:center; margin-top:20px; color: #666;">
+            No hay árbitros registrados.
+        </p>
     </div>
 </div>

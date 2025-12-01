@@ -16,7 +16,7 @@
     <div class="form-container" *ngIf="mostrarFormulario">
         <h3>Datos del nuevo usuario</h3>
         <div class="form-grid">
-            <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Nombre de usuario">
+            <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Nombre de usuario (username)">
             <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Email">
             <input type="password" [(ngModel)]="nuevoUsuario.password" placeholder="Contraseña">
             
@@ -51,14 +51,16 @@
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Rol</th>
-                    <th>Deporte</th> <th>Detalles Extra</th>
+                    <th>Deporte</th>
                     <th style="text-align: center;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let user of usuariosFiltrados">
-                    <td>{{ user.username }}</td>
+                    <td style="font-weight: bold;">{{ user.username }}</td>
+                    
                     <td>{{ user.email }}</td>
+                    
                     <td>
                         <span class="badge" [ngClass]="user.rol">{{ user.rol | uppercase }}</span>
                     </td>
@@ -66,13 +68,6 @@
                     <td>
                         <span *ngIf="user.deporte">{{ user.deporte | titlecase }}</span>
                         <span *ngIf="!user.deporte" style="color: #ccc;">-</span>
-                    </td>
-
-                    <td>
-                        <small *ngIf="user.rol === 'arbitro' && user.dni">
-                            DNI: {{ user.dni }}
-                        </small>
-                        <span *ngIf="user.rol !== 'arbitro'" style="color: #ccc;">-</span>
                     </td>
 
                     <td style="text-align: center;">
