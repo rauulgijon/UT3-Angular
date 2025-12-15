@@ -60,6 +60,10 @@
             <tbody>
                 <tr *ngFor="let user of usuariosFiltrados">
                     <td style="font-weight: bold;">{{ user.username }}</td>
+<<<<<<< HEAD
+=======
+                    
+>>>>>>> 295f13876cd4ca3f3394d6de5a4dd98bbdfdb2cf
                     <td>{{ user.email }}</td>
                     
                     <td>
@@ -68,11 +72,16 @@
                     
                     <td>
                         <span *ngIf="user.deporte">{{ user.deporte }}</span>
+                        <span *ngIf="user.deporte">{{ user.deporte | titlecase }}</span>
                         <span *ngIf="!user.deporte" style="color: #ccc;">-</span>
                     </td>
 
                     <td style="text-align: center;">
+<<<<<<< HEAD
                         <button class="btn-delete" (click)="borrar(user._id)" title="Eliminar usuario">🗑️</button>
+=======
+                        <button class="btn-delete" (click)="borrar(user._id)">🗑️</button>
+>>>>>>> 295f13876cd4ca3f3394d6de5a4dd98bbdfdb2cf
                     </td>
                 </tr>
             </tbody>

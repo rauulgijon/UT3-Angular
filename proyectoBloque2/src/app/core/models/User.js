@@ -6,8 +6,8 @@ const userSchema = new mongoose.Schema({
     username: { type:String, required: true, unique:true },
     password: { type:String, required:true },
     email: { type:String, required:true, unique:true },
-    name: { type:String, required:false },
-    rol: { type:String, enum:['admin', 'jugador', 'arbitro'], default:'jugador' }
+    rol: { type:String, enum:['admin', 'jugador', 'arbitro'], default:'jugador' },
+    deporte: { type:String, enum:['futbol', 'brawl', 'cod'], required:false },
 
 });
 
