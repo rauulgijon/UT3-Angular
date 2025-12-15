@@ -1,24 +1,26 @@
 <div class="admin-panel">
     <div class="header-row">
         <h1>Gestión de Usuarios</h1>
-        <a href="/admin" class="btn-back">⬅ Volver al Panel</a>
+        <a href="/admin" class="btn-back">⬅ Volver</a>
     </div>
 
     <div class="toolbar">
         <div class="search-box">
-            <input type="text" [(ngModel)]="busqueda" (input)="filtrar()" placeholder="Buscar usuario...">
+            <input type="text" [(ngModel)]="busqueda" (input)="filtrar()" placeholder="Buscar...">
         </div>
-        <button class="btn-add" (click)="mostrarFormulario = !mostrarFormulario">
+        <button class="btn-add" (click)="mostrarFormulario ? cerrarFormulario() : mostrarFormulario = true">
             {{ mostrarFormulario ? 'Cancelar' : '+ Nuevo Usuario' }}
         </button>
     </div>
 
     <div class="form-container" *ngIf="mostrarFormulario">
-        <h3>Datos del nuevo usuario</h3>
+        <h3>{{ idEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+        
         <div class="form-grid">
-            <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Nombre de usuario (username)">
+            <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Usuario">
             <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Email">
-            <input type="password" [(ngModel)]="nuevoUsuario.password" placeholder="Contraseña">
+            <input type="password" [(ngModel)]="nuevoUsuario.password" 
+                   [placeholder]="idEdicion ? 'Nueva Contraseña (opcional)' : 'Contraseña'">
             
             <select [(ngModel)]="nuevoUsuario.rol">
                 <option value="jugador">Jugador</option>
@@ -28,7 +30,7 @@
 
             <ng-container *ngIf="nuevoUsuario.rol === 'arbitro' || nuevoUsuario.rol === 'jugador'">
                 <select [(ngModel)]="nuevoUsuario.deporte">
-                    <option value="" disabled selected>Selecciona Deporte</option>
+                    <option value="" disabled selected>Deporte</option>
                     <option value="Fútbol">Fútbol</option>
                     <option value="Baloncesto">Baloncesto</option>
                     <option value="Tenis">Tenis</option>
@@ -42,7 +44,9 @@
                 <input type="text" [(ngModel)]="nuevoUsuario.telefono" placeholder="Teléfono">
             </ng-container>
             
-            <button class="btn-save" (click)="guardar()">Guardar</button>
+            <button class="btn-save" (click)="guardar()">
+                {{ idEdicion ? 'Actualizar Cambios' : 'Guardar Usuario' }}
+            </button>
         </div>
     </div>
 
@@ -50,7 +54,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Nombre</th>
+                    <th>Usuario</th>
                     <th>Email</th>
                     <th>Rol</th>
                     <th>Deporte</th>
@@ -59,36 +63,29 @@
             </thead>
             <tbody>
                 <tr *ngFor="let user of usuariosFiltrados">
-                    <td style="font-weight: bold;">{{ user.username }}</td>
-<<<<<<< HEAD
-=======
-                    
->>>>>>> 295f13876cd4ca3f3394d6de5a4dd98bbdfdb2cf
+                    <td style="font-weight: 500;">{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     
                     <td>
-                        <span class="badge" [ngClass]="user.rol">{{ user.rol | uppercase }}</span>
+                        <span class="badge" [ngClass]="user.rol">{{ user.rol }}</span>
                     </td>
                     
                     <td>
                         <span *ngIf="user.deporte">{{ user.deporte }}</span>
-                        <span *ngIf="user.deporte">{{ user.deporte | titlecase }}</span>
                         <span *ngIf="!user.deporte" style="color: #ccc;">-</span>
                     </td>
 
                     <td style="text-align: center;">
-<<<<<<< HEAD
-                        <button class="btn-delete" (click)="borrar(user._id)" title="Eliminar usuario">🗑️</button>
-=======
-                        <button class="btn-delete" (click)="borrar(user._id)">🗑️</button>
->>>>>>> 295f13876cd4ca3f3394d6de5a4dd98bbdfdb2cf
+                        <button class="btn-edit" (click)="editar(user)" style="margin-right: 10px; cursor: pointer; border:none; background:none; font-size:1.2rem;" title="Editar">
+                            ✏️
+                        </button>
+                        
+                        <button class="btn-delete" (click)="borrar(user._id)" style="cursor: pointer; border:none; background:none; font-size:1.2rem;" title="Borrar">
+                            🗑️
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
-
-        <p *ngIf="usuariosFiltrados.length === 0" style="text-align: center; color: #666; margin-top: 20px;">
-            No se encontraron usuarios.
-        </p>
     </div>
 </div>

@@ -6,7 +6,7 @@ import { AdminService } from '../../../core/services/admin.service';
 @Component({
     selector: 'app-usuarios-admin',
     standalone: true,
-    imports: [CommonModule, FormsModule], 
+    imports: [CommonModule, FormsModule],
     templateUrl: './usuariosAdmin.html',
     styleUrl: './usuariosAdmin.scss'
 })
@@ -14,12 +14,14 @@ export class UsuariosAdminComponent implements OnInit {
     
     private adminService = inject(AdminService);
 
-    listaUsuarios: any[] = [];      // Todos los usuarios traídos del servidor
-    usuariosFiltrados: any[] = [];  // Los que se muestran en la tabla (filtrados)
+    listaUsuarios: any[] = [];
+    usuariosFiltrados: any[] = [];
     busqueda: string = '';
     mostrarFormulario: boolean = false;
+    
+    // Variable para saber si estamos editando (tendrá el ID) o creando (será null)
+    idEdicion: string | null = null;
 
-    // Objeto para guardar los datos del nuevo usuario
     nuevoUsuario = {
         username: '',
         email: '',
@@ -34,65 +36,83 @@ export class UsuariosAdminComponent implements OnInit {
         this.cargarUsuarios();
     }
 
-    // 1. LEER (READ)
     cargarUsuarios() {
         this.adminService.obtenerUsuarios().subscribe({
             next: (data) => {
                 this.listaUsuarios = data;
-                this.filtrar(); // Actualizamos la vista
+                this.filtrar();
             },
-            error: (e) => console.error('Error cargando usuarios:', e)
+            error: (e) => console.error('Error:', e)
         });
     }
 
-    // Lógica del buscador
     filtrar() {
         if (!this.busqueda) {
             this.usuariosFiltrados = this.listaUsuarios;
         } else {
             const texto = this.busqueda.toLowerCase();
             this.usuariosFiltrados = this.listaUsuarios.filter(u => 
-                u.username.toLowerCase().includes(texto) ||
-                u.email.toLowerCase().includes(texto)
+                (u.username && u.username.toLowerCase().includes(texto)) ||
+                (u.email && u.email.toLowerCase().includes(texto))
             );
         }
     }
 
-    // 2. CREAR (CREATE)
+    // Función unificada para Guardar (Crear o Editar)
     guardar() {
-        // Validación básica
-        if (!this.nuevoUsuario.username || !this.nuevoUsuario.email || !this.nuevoUsuario.password) {
-            alert('Por favor, rellena Usuario, Email y Contraseña.');
+        if (!this.nuevoUsuario.username || !this.nuevoUsuario.email) {
+            alert('Usuario y Email son obligatorios');
             return;
         }
 
-        this.adminService.crearUsuario(this.nuevoUsuario).subscribe({
-            next: () => {
-                alert('Usuario creado con éxito');
-                this.mostrarFormulario = false; // Ocultar formulario
-                this.limpiarFormulario();       // Limpiar campos
-                this.cargarUsuarios();          // ¡Importante! Recargar la tabla
-            },
-            error: (e) => {
-                console.error(e);
-                alert('Error al crear usuario. Verifica que el usuario o email no existan ya.');
-            }
-        });
-    }
-
-    // 3. BORRAR (DELETE)
-    borrar(id: string) {
-        if(confirm('¿Seguro que deseas eliminar este usuario permanentemente?')) {
-            this.adminService.borrarUsuario(id).subscribe({
+        if (this.idEdicion) {
+            // --- MODO EDICIÓN ---
+            this.adminService.actualizarUsuario(this.idEdicion, this.nuevoUsuario).subscribe({
                 next: () => {
-                    this.cargarUsuarios(); // Recargar la tabla tras borrar
+                    alert('Usuario actualizado correctamente');
+                    this.cerrarFormulario();
+                    this.cargarUsuarios();
                 },
-                error: (err) => alert("Error al borrar el usuario")
+                error: (e) => alert('Error al actualizar')
+            });
+        } else {
+            // --- MODO CREACIÓN ---
+            if (!this.nuevoUsuario.password) {
+                alert('La contraseña es obligatoria para nuevos usuarios');
+                return;
+            }
+            this.adminService.crearUsuario(this.nuevoUsuario).subscribe({
+                next: () => {
+                    alert('Usuario creado correctamente');
+                    this.cerrarFormulario();
+                    this.cargarUsuarios();
+                },
+                error: (e) => alert('Error al crear')
             });
         }
     }
 
-    limpiarFormulario() {
+    // Cargar datos en el formulario para editar
+    editar(usuario: any) {
+        this.idEdicion = usuario._id; // Guardamos el ID que estamos editando
+        this.nuevoUsuario = { ...usuario }; // Copiamos los datos al formulario
+        this.nuevoUsuario.password = ''; // Por seguridad, limpiamos la contraseña (opcional)
+        this.mostrarFormulario = true; // Abrimos el formulario
+    }
+
+    borrar(id: string) {
+        if(confirm('¿Borrar usuario permanentemente?')) {
+            this.adminService.borrarUsuario(id).subscribe(() => this.cargarUsuarios());
+        }
+    }
+
+    cerrarFormulario() {
+        this.mostrarFormulario = false;
+        this.idEdicion = null; // Resetear modo edición
+        this.limpiarModelo();
+    }
+
+    limpiarModelo() {
         this.nuevoUsuario = {
             username: '',
             email: '',

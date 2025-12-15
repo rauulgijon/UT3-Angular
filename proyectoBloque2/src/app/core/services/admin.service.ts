@@ -29,6 +29,10 @@ export class AdminService {
     return this.http.delete(`${this.apiUrl}/usuarios/${id}`);
   }
 
+  actualizarUsuario(id: string, usuario: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/usuarios/${id}`, usuario);
+  }
+
   // --- MÉTODOS EXTRA (para árbitros, si los usas luego) ---
   obtenerArbitros(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/arbitros`);

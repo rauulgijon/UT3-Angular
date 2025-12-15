@@ -113,6 +113,25 @@ app.delete("/api/arbitros/:id", async (req, res) => {
   }
 });
 
+// Actualizar un usuario existente
+app.put("/api/usuarios/:id", async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+  
+  try {
+    // { new: true } hace que nos devuelva el usuario ya modificado
+    const usuarioActualizado = await Usuario.findByIdAndUpdate(id, updates, { new: true });
+    
+    if (!usuarioActualizado) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.json({ message: "Usuario actualizado", usuario: usuarioActualizado });
+  } catch (error) {
+    console.error("Error actualizando:", error);
+    res.status(500).json({ message: "Error al actualizar usuario" });
+  }
+});
+
 // ----------------------------------------------------
 // ARRANQUE DEL SERVIDOR
 // ----------------------------------------------------
