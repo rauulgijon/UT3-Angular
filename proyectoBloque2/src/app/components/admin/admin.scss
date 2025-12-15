@@ -1,67 +1,107 @@
-// Variables de color
-$primary: #3b82f6; // Azul moderno
-$primary-hover: #2563eb;
-$bg-color: #f3f4f6;
-$text-color: #111827;
+// --- Variables del Tema "Night League" ---
+$bg-main: #0f172a;       // Azul muy oscuro
+$bg-surface: #1e293b;    // Azul oscuro (Tarjetas)
+$primary: #3b82f6;       // Azul brillante
+$accent: #10b981;        // Verde Esmeralda
+$text-main: #f1f5f9;     // Blanco
+$text-muted: #94a3b8;    // Gris
+$shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 
 // Contenedor principal
 .admin-container {
-  // Flexbox para centrar H y V
   display: flex;
   flex-direction: column;
-  justify-content: center; // Centrado vertical
-  align-items: center;     // Centrado horizontal
-  
-  // Ocupar toda la pantalla
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
   width: 100%;
-  background-color: $bg-color;
-  font-family: sans-serif; // O tu fuente preferida
+  background-color: $bg-main;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  color: $text-main;
+  padding: 20px;
 
   h1 {
-    margin-bottom: 2.5rem; // Separación del título
-    color: $text-color;
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 4rem; // Un poco más de espacio
     text-align: center;
+    letter-spacing: -1px;
+    
+    background: linear-gradient(to right, $primary, $accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: $primary; 
   }
 }
 
-// Contenedor de los botones
+// Contenedor de botones
 .admin-buttons {
-  display: flex;
-  flex-direction: row; // En fila (horizontal)
-  flex-wrap: wrap;     // Si no caben, bajan de línea
-  gap: 1.5rem;         // Espacio entre botones
-  justify-content: center;
+  display: grid;
+  // CAMBIO: Forzamos 5 columnas iguales para que entren en una línea
+  grid-template-columns: repeat(5, 1fr); 
+  gap: 20px;
+  width: 100%;
+  // CAMBIO: Aumentamos el ancho máximo para que quepan los 5 botones
+  max-width: 1200px; 
 }
 
-// Estilo del botón individual
+// Estilo del botón (Tipo Tarjeta)
 .admin-button {
-  // Estética
-  background-color: $primary;
-  color: white;
-  padding: 1rem 2rem; // Tamaño del botón
-  border-radius: 8px; // Bordes redondeados
+  background-color: $bg-surface;
+  color: $text-muted;
+  padding: 2rem 1rem; // Ajuste de padding para que no sean tan altos
+  border-radius: 16px;
   font-size: 1rem;
-  font-weight: 600;
-  
-  // Importante para resetear el estilo por defecto de <button>
-  border: none;
+  font-weight: 700;
+  border: 1px solid rgba($primary, 0.2);
   outline: none;
-  cursor: pointer; // Manita al pasar el ratón
+  cursor: pointer;
   
-  // Transiciones suaves
-  transition: transform 0.2s ease, background-color 0.2s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  
+  // Para centrar el texto si se rompe en dos líneas en pantallas medianas
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
   &:hover {
-    background-color: $primary-hover;
-    transform: translateY(-2px); // Efecto de elevación
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    background-color: lighten($bg-surface, 5%);
+    color: $primary;
+    border-color: $primary;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.6), 
+                0 0 15px rgba($primary, 0.3);
   }
 
   &:active {
-    transform: translateY(0); // Efecto de presionar
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.6);
+  }
+}
+
+// Responsive: Ajustes para pantallas más pequeñas
+@media (max-width: 1024px) {
+  .admin-buttons {
+    // En tablets, permitimos que bajen de línea si no caben
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-container h1 {
+    font-size: 2rem;
+  }
+  
+  .admin-buttons {
+    // En móvil, una sola columna
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-button {
+    padding: 1.5rem; // Botones más compactos en móvil
   }
 }

@@ -1,0 +1,100 @@
+<div class="admin-panel">
+    <div class="header-row">
+        <h1>Gestión de Partidos</h1>
+        <a href="/admin/competiciones" class="btn-back">⬅ Volver a Competiciones</a>
+    </div>
+
+    <div class="toolbar">
+        <div style="flex-grow: 1; color: #94a3b8;">
+            Listado de encuentros de la competición
+        </div>
+        <button class="btn-add" (click)="mostrarFormulario = true">+ Añadir Partido</button>
+    </div>
+
+    <div class="modal-overlay" *ngIf="mostrarFormulario">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>{{ idEdicion ? 'Editar Resultado/Datos' : 'Programar Partido' }}</h3>
+                <button class="btn-close-x" (click)="cerrarFormulario()">×</button>
+            </div>
+            
+            <div class="form-grid">
+                <input type="text" [(ngModel)]="nuevoPartido.local" placeholder="Equipo Local">
+                <input type="text" [(ngModel)]="nuevoPartido.visitante" placeholder="Equipo Visitante">
+                
+                <input type="date" [(ngModel)]="nuevoPartido.fecha">
+                <input type="time" [(ngModel)]="nuevoPartido.hora">
+
+                <select [(ngModel)]="nuevoPartido.arbitro">
+                    <option value="" disabled selected>Asignar Árbitro</option>
+                    <option *ngFor="let arb of listaArbitros" [value]="arb._id">
+                        {{ arb.username }} ({{ arb.deporte }})
+                    </option>
+                </select>
+
+                <select [(ngModel)]="nuevoPartido.estado">
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Jugado">Jugado</option>
+                    <option value="Suspendido">Suspendido</option>
+                </select>
+
+                <input type="text" [(ngModel)]="nuevoPartido.resultado" placeholder="Resultado (Ej: 2-1)">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="cerrarFormulario()">Cancelar</button>
+                <button class="btn-save" (click)="guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th style="text-align: right;">Local</th>
+                    <th style="text-align: center;">VS</th>
+                    <th style="text-align: left;">Visitante</th>
+                    <th>Árbitro</th>
+                    <th>Estado</th>
+                    <th style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p of listaPartidos">
+                    <td style="color: #94a3b8; font-size: 0.9rem;">
+                        {{ p.fecha | date:'dd/MM/yyyy' }} <br> {{ p.hora }}
+                    </td>
+                    
+                    <td style="text-align: right; font-weight: bold; color: white;">{{ p.local }}</td>
+                    
+                    <td style="text-align: center; font-weight: bold; color: #3b82f6;">
+                        <span style="background: rgba(59, 130, 246, 0.1); padding: 5px 10px; border-radius: 8px;">
+                            {{ p.resultado }}
+                        </span>
+                    </td>
+                    
+                    <td style="text-align: left; font-weight: bold; color: white;">{{ p.visitante }}</td>
+                    
+                    <td>{{ p.arbitro?.username || 'Sin asignar' }}</td>
+                    
+                    <td>
+                        <span class="badge" 
+                              [ngClass]="{'jugado': p.estado === 'Jugado', 'pendiente': p.estado === 'Pendiente'}">
+                            {{ p.estado }}
+                        </span>
+                    </td>
+
+                    <td style="text-align: center;">
+                        <button class="btn-edit" (click)="editar(p)" title="Editar Resultado">✏️</button>
+                        <button class="btn-delete" (click)="borrar(p._id)" title="Borrar">🗑️</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p *ngIf="listaPartidos.length === 0" style="text-align:center; padding: 30px; color: #64748b;">
+            No hay partidos programados en esta competición.
+        </p>
+    </div>
+</div>

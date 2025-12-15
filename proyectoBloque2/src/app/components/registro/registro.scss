@@ -1,89 +1,119 @@
-/* Estilos generales para ambos contenedores */
-.login-container, 
-.registro-container {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Sombra suave */
+// --- Variables "Night League" ---
+$bg-main: #0f172a;
+$bg-surface: #1e293b;
+$bg-input: #334155;
+$primary: #3b82f6;
+$accent: #10b981;
+$text-main: #f1f5f9;
+$text-muted: #94a3b8;
+$radius: 16px;
+$shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+
+.auth-wrapper {
+  min-height: 100vh;
   width: 100%;
-  max-width: 400px; /* Ancho máximo para que no se estire demasiado */
-  margin: 2rem auto; /* Centrado horizontal */
+  background-color: $bg-main;
   display: flex;
-  flex-direction: column;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Títulos */
-.login-container h2, 
-.registro-container h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-}
-
-/* Inputs (Campos de texto) */
-.login-container input, 
-.registro-container input {
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-/* Efecto al hacer clic en el input */
-.login-container input:focus, 
-.registro-container input:focus {
-  border-color: #007bff; /* Color azul al escribir */
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-}
-
-/* Botones */
-.login-container button, 
-.registro-container button {
-  padding: 12px;
-  background-color: #007bff; /* Color principal */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s;
-  margin-bottom: 15px;
-}
-
-/* Efecto hover del botón */
-.login-container button:hover, 
-.registro-container button:hover {
-  background-color: #0056b3; /* Azul más oscuro */
-}
-
-.login-container button:active, 
-.registro-container button:active {
-  transform: scale(0.98); /* Pequeño efecto de pulsación */
-}
-
-/* Enlaces y texto inferior */
-.login-container a, 
-.registro-container a,
 .registro-container {
+  background-color: $bg-surface;
+  padding: 3rem 2.5rem;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  width: 100%;
+  max-width: 400px;
   text-align: center;
-  color: #666;
-  font-size: 0.9rem;
-  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: fadeIn 0.5s ease-out;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    letter-spacing: -0.5px;
+    // Degradado invertido para diferenciar sutilmente
+    background: linear-gradient(to right, $accent, $primary); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: white; 
+  }
+
+  input {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 1.2rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background-color: $bg-input;
+    color: $text-main;
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+
+    &:focus {
+      background-color: lighten($bg-input, 3%);
+      border-color: $accent; // Acento verde para registro
+      box-shadow: 0 0 0 3px rgba($accent, 0.25);
+    }
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, $accent, darken($accent, 15%)); // Botón verde
+    color: #022c22; // Texto oscuro para contraste en verde
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba($accent, 0.4);
+      filter: brightness(1.1);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  .footer-text {
+    color: $text-muted;
+    font-size: 0.95rem;
+
+    a {
+      color: $primary; // Azul para volver al login
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+
+      &:hover {
+        color: lighten($primary, 10%);
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
-.registro-container a {
-  color: #007bff;
-  font-weight: 600;
-  margin-left: 5px;
-}
-
-.login-container a:hover, 
-.registro-container a:hover {
-  text-decoration: underline;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

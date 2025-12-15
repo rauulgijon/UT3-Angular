@@ -1,0 +1,100 @@
+<div class="admin-panel">
+    <div class="header-row">
+        <h1>Gestión de Competiciones</h1>
+        <a href="/admin" class="btn-back">⬅ Volver al Panel</a>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <input type="text" [(ngModel)]="busqueda" (input)="filtrar()" placeholder="Buscar liga o torneo...">
+        </div>
+        <button class="btn-add" (click)="mostrarFormulario = true">
+            + Nueva Competición
+        </button>
+    </div>
+
+    <div class="modal-overlay" *ngIf="mostrarFormulario">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>{{ idEdicion ? 'Editar Competición' : 'Nueva Competición' }}</h3>
+                <button class="btn-close-x" (click)="cerrarFormulario()">×</button>
+            </div>
+            
+            <div class="form-grid">
+                <input type="text" [(ngModel)]="nuevaCompeticion.nombre" placeholder="Nombre de la Liga">
+                
+                <select [(ngModel)]="nuevaCompeticion.deporte">
+                    <option value="" disabled selected>Selecciona Deporte</option>
+                    <option value="Fútbol">Fútbol</option>
+                    <option value="Baloncesto">Baloncesto</option>
+                    <option value="Tenis">Tenis</option>
+                    <option value="Call of Duty">Call of Duty</option>
+                    <option value="Brawl Stars">Brawl Stars</option>
+                </select>
+
+                <select [(ngModel)]="nuevaCompeticion.nivel">
+                    <option value="Amateur">Amateur</option>
+                    <option value="Nacional">Nacional</option>
+                    <option value="Internacional">Internacional</option>
+                </select>
+
+                <input type="text" [(ngModel)]="nuevaCompeticion.temporada" placeholder="Temporada (Ej: 2024/25)">
+                <input type="text" [(ngModel)]="nuevaCompeticion.premios" placeholder="Premios (Opcional)">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="cerrarFormulario()">Cancelar</button>
+                <button class="btn-save" (click)="guardar()">
+                    {{ idEdicion ? 'Actualizar' : 'Guardar' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Deporte</th>
+                    <th>Nivel</th>
+                    <th>Temporada</th>
+                    <th style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let comp of competicionesFiltradas">
+                    <td style="font-weight: bold; color: #f1f5f9;">{{ comp.nombre }}</td>
+                    <td>{{ comp.deporte }}</td>
+                    
+                    <td>
+                        <span class="badge nivel">{{ comp.nivel }}</span>
+                    </td>
+                    
+                    <td style="color: #94a3b8;">{{ comp.temporada || '-' }}</td>
+
+                    <td style="text-align: center;">
+                        <a [routerLink]="['/admin/competiciones', comp._id, 'partidos']" 
+                           class="btn-matches" 
+                           title="Gestionar Partidos"
+                           style="margin-right: 15px; text-decoration: none; cursor: pointer; font-size: 1.2rem;">
+                           ⚽
+                        </a>
+
+                        <button class="btn-edit" (click)="editar(comp)" style="margin-right: 15px; cursor: pointer; border:none; background:none; font-size:1.2rem;" title="Editar">
+                            ✏️
+                        </button>
+                        
+                        <button class="btn-delete" (click)="borrar(comp._id)" style="cursor: pointer; border:none; background:none; font-size:1.2rem;" title="Borrar">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p *ngIf="competicionesFiltradas.length === 0" style="text-align:center; padding: 30px; color: #64748b;">
+            No hay competiciones registradas.
+        </p>
+    </div>
+</div>

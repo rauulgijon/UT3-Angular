@@ -6,6 +6,9 @@ import dotenv from "dotenv";
 // Importamos los modelos
 import Usuario from "./src/app/core/models/User.js";
 import Arbitro from "./src/app/core/models/Arbitro.js";
+// NUEVOS MODELOS (Asegúrate de que existen, ver paso 2)
+import Competicion from "./src/app/core/models/Competicion.js";
+import Partido from "./src/app/core/models/Partido.js";
 
 dotenv.config();
 const app = express();
@@ -20,14 +23,10 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.log("Error MongoDB :(", err));
 
 // ----------------------------------------------------
-// RUTAS DE AUTENTICACIÓN (LOGIN Y REGISTRO)
+// RUTAS DE AUTENTICACIÓN
 // ----------------------------------------------------
-
-// Login
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
-  console.log("Intento de login:", username);
-
   try {
     const user = await Usuario.findOne({ username, password });
     if (user) {
@@ -36,39 +35,23 @@ app.post("/api/login", async (req, res) => {
         res.status(401).json({ message: "Credenciales incorrectas" });
     }
   } catch (error) {
-    console.error("Error login:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(500).json({ message: "Error interno" });
   }
 });
 
-// Registro (Sirve para crear usuarios desde el admin también)
 app.post("/api/registro", async (req, res) => {
-  const { username, password, email, rol, dni, deporte, telefono } = req.body;
-  
   try {
-    const nuevoUsuario = new Usuario({
-      username,
-      password,
-      email,
-      rol: rol || 'jugador',
-      dni,
-      deporte,
-      telefono
-    });
-
+    const nuevoUsuario = new Usuario(req.body);
     await nuevoUsuario.save();
-    res.json({ message: "Usuario registrado con éxito", usuario: nuevoUsuario });
+    res.json({ message: "Usuario registrado", usuario: nuevoUsuario });
   } catch (error) {
-    console.error("Error registro:", error);
-    res.status(500).json({ message: "Error al registrar el usuario", error: error.message });
+    res.status(500).json({ message: "Error al registrar", error: error.message });
   }
 });
 
 // ----------------------------------------------------
-// RUTAS DE GESTIÓN DE USUARIOS
+// RUTAS DE USUARIOS Y ÁRBITROS
 // ----------------------------------------------------
-
-// Obtener todos los usuarios
 app.get("/api/usuarios", async (req, res) => {
   try {
     const usuarios = await Usuario.find();
@@ -78,24 +61,26 @@ app.get("/api/usuarios", async (req, res) => {
   }
 });
 
-// Eliminar un usuario
 app.delete("/api/usuarios/:id", async (req, res) => {
   try {
     await Usuario.findByIdAndDelete(req.params.id);
     res.json({ message: "Usuario eliminado" });
   } catch (error) {
-    res.status(500).json({ message: "Error al eliminar usuario" });
+    res.status(500).json({ message: "Error al eliminar" });
   }
 });
 
-// ----------------------------------------------------
-// RUTAS DE GESTIÓN DE ÁRBITROS (CORREGIDO)
-// ----------------------------------------------------
+app.put("/api/usuarios/:id", async (req, res) => {
+  try {
+    const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ message: "Usuario actualizado", usuario: usuarioActualizado });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar" });
+  }
+});
 
-// Obtener usuarios que sean Árbitros
 app.get("/api/arbitros", async (req, res) => {
   try {
-    // Buscamos en el modelo Usuario, filtrando por rol 'arbitro'
     const listaArbitros = await Usuario.find({ rol: 'arbitro' });
     res.json(listaArbitros);
   } catch (error) {
@@ -103,37 +88,98 @@ app.get("/api/arbitros", async (req, res) => {
   }
 });
 
-// Eliminar un árbitro (usamos el modelo Usuario)
 app.delete("/api/arbitros/:id", async (req, res) => {
   try {
     await Usuario.findByIdAndDelete(req.params.id);
     res.json({ message: "Árbitro eliminado" });
   } catch (error) {
-    res.status(500).json({ message: "Error al eliminar árbitro" });
+    res.status(500).json({ message: "Error al eliminar" });
   }
 });
 
-// Actualizar un usuario existente
-app.put("/api/usuarios/:id", async (req, res) => {
-  const { id } = req.params;
-  const updates = req.body;
-  
+// ----------------------------------------------------
+// RUTAS DE COMPETICIONES (ESTO ES LO QUE FALTABA)
+// ----------------------------------------------------
+app.get("/api/competiciones", async (req, res) => {
   try {
-    // { new: true } hace que nos devuelva el usuario ya modificado
-    const usuarioActualizado = await Usuario.findByIdAndUpdate(id, updates, { new: true });
-    
-    if (!usuarioActualizado) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-    res.json({ message: "Usuario actualizado", usuario: usuarioActualizado });
+    const lista = await Competicion.find();
+    res.json(lista);
   } catch (error) {
-    console.error("Error actualizando:", error);
-    res.status(500).json({ message: "Error al actualizar usuario" });
+    res.status(500).json({ message: "Error al obtener competiciones" });
+  }
+});
+
+app.post("/api/competiciones", async (req, res) => {
+  try {
+    const nueva = new Competicion(req.body);
+    await nueva.save();
+    res.json({ message: "Competición creada", competicion: nueva });
+  } catch (error) {
+    res.status(500).json({ message: "Error al crear" });
+  }
+});
+
+app.put("/api/competiciones/:id", async (req, res) => {
+  try {
+    const actualizada = await Competicion.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ message: "Actualizada", competicion: actualizada });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar" });
+  }
+});
+
+app.delete("/api/competiciones/:id", async (req, res) => {
+  try {
+    await Competicion.findByIdAndDelete(req.params.id);
+    // Opcional: Borrar también los partidos asociados
+    await Partido.deleteMany({ competicion: req.params.id });
+    res.json({ message: "Competición eliminada" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar" });
   }
 });
 
 // ----------------------------------------------------
-// ARRANQUE DEL SERVIDOR
+// RUTAS DE PARTIDOS
 // ----------------------------------------------------
+app.get("/api/partidos/:competicionId", async (req, res) => {
+  try {
+    const partidos = await Partido.find({ competicion: req.params.competicionId })
+                                  .populate('arbitro', 'username');
+    res.json(partidos);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener partidos" });
+  }
+});
+
+app.post("/api/partidos", async (req, res) => {
+  try {
+    const nuevo = new Partido(req.body);
+    await nuevo.save();
+    res.json({ message: "Partido creado", partido: nuevo });
+  } catch (error) {
+    res.status(500).json({ message: "Error al crear" });
+  }
+});
+
+app.put("/api/partidos/:id", async (req, res) => {
+  try {
+    const actualizado = await Partido.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ message: "Partido actualizado", partido: actualizado });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar" });
+  }
+});
+
+app.delete("/api/partidos/:id", async (req, res) => {
+  try {
+    await Partido.findByIdAndDelete(req.params.id);
+    res.json({ message: "Partido eliminado" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar" });
+  }
+});
+
+// Arrancar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));

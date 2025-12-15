@@ -6,47 +6,53 @@
 
     <div class="toolbar">
         <div class="search-box">
-            <input type="text" [(ngModel)]="busqueda" (input)="filtrar()" placeholder="Buscar...">
+            <input type="text" [(ngModel)]="busqueda" (input)="filtrar()" placeholder="Buscar usuario o email...">
         </div>
-        <button class="btn-add" (click)="mostrarFormulario ? cerrarFormulario() : mostrarFormulario = true">
-            {{ mostrarFormulario ? 'Cancelar' : '+ Nuevo Usuario' }}
+        <button class="btn-add" (click)="mostrarFormulario = true">
+            + Nuevo Usuario
         </button>
     </div>
 
-    <div class="form-container" *ngIf="mostrarFormulario">
-        <h3>{{ idEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
-        
-        <div class="form-grid">
-            <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Usuario">
-            <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Email">
-            <input type="password" [(ngModel)]="nuevoUsuario.password" 
-                   [placeholder]="idEdicion ? 'Nueva Contraseña (opcional)' : 'Contraseña'">
+    <div class="modal-overlay" *ngIf="mostrarFormulario">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>{{ idEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+                <button class="btn-close-x" (click)="cerrarFormulario()">×</button>
+            </div>
             
-            <select [(ngModel)]="nuevoUsuario.rol">
-                <option value="jugador">Jugador</option>
-                <option value="arbitro">Árbitro</option>
-                <option value="admin">Admin</option>
-            </select>
-
-            <ng-container *ngIf="nuevoUsuario.rol === 'arbitro' || nuevoUsuario.rol === 'jugador'">
-                <select [(ngModel)]="nuevoUsuario.deporte">
-                    <option value="" disabled selected>Deporte</option>
-                    <option value="Fútbol">Fútbol</option>
-                    <option value="Baloncesto">Baloncesto</option>
-                    <option value="Tenis">Tenis</option>
-                    <option value="Call of Duty">Call of Duty</option>
-                    <option value="Brawl Stars">Brawl Stars</option>
+            <div class="form-grid">
+                <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Usuario">
+                <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Email">
+                <input type="password" [(ngModel)]="nuevoUsuario.password" 
+                       [placeholder]="idEdicion ? 'Nueva Contraseña (opcional)' : 'Contraseña'">
+                
+                <select [(ngModel)]="nuevoUsuario.rol">
+                    <option value="jugador">Jugador</option>
+                    <option value="arbitro">Árbitro</option>
+                    <option value="admin">Admin</option>
                 </select>
-            </ng-container>
 
-            <ng-container *ngIf="nuevoUsuario.rol === 'arbitro'">
-                <input type="text" [(ngModel)]="nuevoUsuario.dni" placeholder="DNI">
-                <input type="text" [(ngModel)]="nuevoUsuario.telefono" placeholder="Teléfono">
-            </ng-container>
-            
-            <button class="btn-save" (click)="guardar()">
-                {{ idEdicion ? 'Actualizar Cambios' : 'Guardar Usuario' }}
-            </button>
+                <ng-container *ngIf="nuevoUsuario.rol === 'arbitro' || nuevoUsuario.rol === 'jugador'">
+                    <select [(ngModel)]="nuevoUsuario.deporte">
+                        <option value="" disabled selected>Deporte</option>
+                        <option value="Fútbol">Fútbol</option>
+                        <option value="Call of Duty">Call of Duty</option>
+                        <option value="Brawl Stars">Brawl Stars</option>
+                    </select>
+                </ng-container>
+
+                <ng-container *ngIf="nuevoUsuario.rol === 'arbitro'">
+                    <input type="text" [(ngModel)]="nuevoUsuario.dni" placeholder="DNI">
+                    <input type="text" [(ngModel)]="nuevoUsuario.telefono" placeholder="Teléfono">
+                </ng-container>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="cerrarFormulario()">Cancelar</button>
+                <button class="btn-save" (click)="guardar()">
+                    {{ idEdicion ? 'Actualizar' : 'Guardar' }}
+                </button>
+            </div>
         </div>
     </div>
 
@@ -65,21 +71,17 @@
                 <tr *ngFor="let user of usuariosFiltrados">
                     <td style="font-weight: 500;">{{ user.username }}</td>
                     <td>{{ user.email }}</td>
-                    
                     <td>
                         <span class="badge" [ngClass]="user.rol">{{ user.rol }}</span>
                     </td>
-                    
                     <td>
                         <span *ngIf="user.deporte">{{ user.deporte }}</span>
-                        <span *ngIf="!user.deporte" style="color: #ccc;">-</span>
+                        <span *ngIf="!user.deporte" style="color: #64748b;">-</span>
                     </td>
-
                     <td style="text-align: center;">
                         <button class="btn-edit" (click)="editar(user)" style="margin-right: 10px; cursor: pointer; border:none; background:none; font-size:1.2rem;" title="Editar">
                             ✏️
                         </button>
-                        
                         <button class="btn-delete" (click)="borrar(user._id)" style="cursor: pointer; border:none; background:none; font-size:1.2rem;" title="Borrar">
                             🗑️
                         </button>

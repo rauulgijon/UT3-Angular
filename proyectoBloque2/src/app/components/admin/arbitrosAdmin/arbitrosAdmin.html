@@ -1,24 +1,48 @@
 <div class="admin-panel">
     <div class="header-row">
         <h1>Gestión de Árbitros</h1>
-        <a href="/admin" class="btn-back">⬅ Volver al Panel</a>
+        <a href="/admin" class="btn-back">⬅ Volver</a>
     </div>
 
-    <div class="form-container">
-        <h3>Nuevo Árbitro</h3>
-        <div class="form-grid">
-            <input type="text" [(ngModel)]="nuevoArbitro.username" placeholder="Nombre de usuario">
-            <input type="email" [(ngModel)]="nuevoArbitro.email" placeholder="Email">
-            <input type="password" [(ngModel)]="nuevoArbitro.password" placeholder="Contraseña">
+    <div class="toolbar">
+        <div class="search-box">
+            <input type="text" [(ngModel)]="busqueda" (input)="filtrar()" placeholder="Buscar árbitro o deporte...">
+        </div>
+        <button class="btn-add" (click)="mostrarFormulario = true">
+            + Nuevo Árbitro
+        </button>
+    </div>
+
+    <div class="modal-overlay" *ngIf="mostrarFormulario">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>{{ idEdicion ? 'Editar Árbitro' : 'Nuevo Árbitro' }}</h3>
+                <button class="btn-close-x" (click)="cerrarFormulario()">×</button>
+            </div>
             
-            <select [(ngModel)]="nuevoArbitro.deporte">
-                <option value="" disabled selected>Selecciona Deporte</option>
-                <option value="futbol">Fútbol</option>
-                <option value="baloncesto">Baloncesto</option>
-                <option value="tenis">Tenis</option>
-            </select>
-            
-            <button class="btn-save" (click)="guardar()">Guardar</button>
+            <div class="form-grid">
+                <input type="text" [(ngModel)]="nuevoArbitro.username" placeholder="Nombre completo">
+                <input type="email" [(ngModel)]="nuevoArbitro.email" placeholder="Email">
+                <input type="password" [(ngModel)]="nuevoArbitro.password" 
+                       [placeholder]="idEdicion ? 'Nueva Contraseña (opcional)' : 'Contraseña'">
+                
+                <select [(ngModel)]="nuevoArbitro.deporte">
+                    <option value="" disabled selected>Especialidad Deportiva</option>
+                    <option value="Fútbol">Fútbol</option>
+                    <option value="Call of Duty">Call of Duty</option>
+                    <option value="Brawl Stars">Brawl Stars</option>
+                </select>
+
+                <input type="text" [(ngModel)]="nuevoArbitro.dni" placeholder="DNI / Licencia">
+                <input type="text" [(ngModel)]="nuevoArbitro.telefono" placeholder="Teléfono de contacto">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="cerrarFormulario()">Cancelar</button>
+                <button class="btn-save" (click)="guardar()">
+                    {{ idEdicion ? 'Actualizar Cambios' : 'Guardar Árbitro' }}
+                </button>
+            </div>
         </div>
     </div>
 
@@ -29,23 +53,40 @@
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Deporte</th>
+                    <th>Contacto</th>
                     <th style="text-align: center;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let arbitro of listaArbitros">
-                    <td style="font-weight: bold;">{{ arbitro.username }}</td>
+                <tr *ngFor="let arbitro of arbitrosFiltrados">
+                    <td style="font-weight: 500; color: #f1f5f9;">{{ arbitro.username }}</td>
                     <td>{{ arbitro.email }}</td>
-                    <td>{{ arbitro.deporte | titlecase }}</td>
+                    
+                    <td>
+                        <span class="badge arbitro" *ngIf="arbitro.deporte">{{ arbitro.deporte }}</span>
+                        <span *ngIf="!arbitro.deporte" style="color: #64748b;">-</span>
+                    </td>
+
+                    <td>
+                        <span *ngIf="arbitro.telefono">{{ arbitro.telefono }}</span>
+                        <span *ngIf="!arbitro.telefono" style="color: #64748b;">-</span>
+                    </td>
+
                     <td style="text-align: center;">
-                        <button class="btn-delete" (click)="borrar(arbitro._id)">🗑️</button>
+                        <button class="btn-edit" (click)="editar(arbitro)" style="margin-right: 15px; cursor: pointer; border:none; background:none; font-size:1.2rem;" title="Editar">
+                            ✏️
+                        </button>
+                        
+                        <button class="btn-delete" (click)="borrar(arbitro._id)" style="cursor: pointer; border:none; background:none; font-size:1.2rem;" title="Borrar">
+                            🗑️
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
         
-        <p *ngIf="listaArbitros.length === 0" style="text-align:center; margin-top:20px; color: #666;">
-            No hay árbitros registrados.
+        <p *ngIf="arbitrosFiltrados.length === 0" style="text-align:center; padding: 30px; color: #64748b;">
+            No se encontraron árbitros.
         </p>
     </div>
 </div>
