@@ -24,9 +24,7 @@ export const routes: Routes = [
     { path: 'admin/usuariosAdmin', component: UsuariosAdminComponent },
     { path: 'admin/arbitrosAdmin', component: ArbitrosAdminComponent },
     
-    // --- ESTAS SON LAS RUTAS QUE TE FALTABAN ---
     { path: 'admin/competiciones', component: CompeticionesAdminComponent },
-    // El :id es la parte dinámica (el código raro de la URL)
     { path: 'admin/competiciones/:id/partidos', component: PartidosAdminComponent },
 
     // Pantallas de otros roles
