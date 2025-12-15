@@ -6,28 +6,43 @@
 
     <div class="toolbar">
         <div class="search-box">
-            <input type="text" placeholder="Buscar usuario...">
+            <input type="text" [(ngModel)]="busqueda" (input)="filtrar()" placeholder="Buscar usuario...">
         </div>
-        
-        <button class="btn-add">
-            + Nuevo Usuario
+        <button class="btn-add" (click)="mostrarFormulario = !mostrarFormulario">
+            {{ mostrarFormulario ? 'Cancelar' : '+ Nuevo Usuario' }}
         </button>
     </div>
 
-    <div class="form-container">
-        <h3>Datos del usuario</h3>
+    <div class="form-container" *ngIf="mostrarFormulario">
+        <h3>Datos del nuevo usuario</h3>
         <div class="form-grid">
-            <input type="text" placeholder="Nombre de usuario">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Contraseña">
+            <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Nombre de usuario (username)">
+            <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Email">
+            <input type="password" [(ngModel)]="nuevoUsuario.password" placeholder="Contraseña">
             
-            <select>
+            <select [(ngModel)]="nuevoUsuario.rol">
                 <option value="jugador">Jugador</option>
                 <option value="arbitro">Árbitro</option>
                 <option value="admin">Admin</option>
             </select>
+
+            <ng-container *ngIf="nuevoUsuario.rol === 'arbitro' || nuevoUsuario.rol === 'jugador'">
+                <select [(ngModel)]="nuevoUsuario.deporte">
+                    <option value="" disabled selected>Selecciona Deporte</option>
+                    <option value="Fútbol">Fútbol</option>
+                    <option value="Baloncesto">Baloncesto</option>
+                    <option value="Tenis">Tenis</option>
+                    <option value="Call of Duty">Call of Duty</option>
+                    <option value="Brawl Stars">Brawl Stars</option>
+                </select>
+            </ng-container>
+
+            <ng-container *ngIf="nuevoUsuario.rol === 'arbitro'">
+                <input type="text" [(ngModel)]="nuevoUsuario.dni" placeholder="DNI">
+                <input type="text" [(ngModel)]="nuevoUsuario.telefono" placeholder="Teléfono">
+            </ng-container>
             
-            <button class="btn-save">Guardar</button>
+            <button class="btn-save" (click)="guardar()">Guardar</button>
         </div>
     </div>
 
@@ -38,29 +53,33 @@
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Rol</th>
+                    <th>Deporte</th>
                     <th style="text-align: center;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>admin_prueba</td>
-                    <td>admin@test.com</td>
-                    <td><span class="badge admin">ADMIN</span></td>
-                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
-                </tr>
-                <tr>
-                    <td>pepe_jugador</td>
-                    <td>pepe@test.com</td>
-                    <td><span class="badge jugador">JUGADOR</span></td>
-                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
-                </tr>
-                <tr>
-                    <td>arbitro_1</td>
-                    <td>ref@test.com</td>
-                    <td><span class="badge arbitro">ARBITRO</span></td>
-                    <td style="text-align: center;"><button class="btn-delete">🗑️</button></td>
+                <tr *ngFor="let user of usuariosFiltrados">
+                    <td style="font-weight: bold;">{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    
+                    <td>
+                        <span class="badge" [ngClass]="user.rol">{{ user.rol | uppercase }}</span>
+                    </td>
+                    
+                    <td>
+                        <span *ngIf="user.deporte">{{ user.deporte }}</span>
+                        <span *ngIf="!user.deporte" style="color: #ccc;">-</span>
+                    </td>
+
+                    <td style="text-align: center;">
+                        <button class="btn-delete" (click)="borrar(user._id)" title="Eliminar usuario">🗑️</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
+
+        <p *ngIf="usuariosFiltrados.length === 0" style="text-align: center; color: #666; margin-top: 20px;">
+            No se encontraron usuarios.
+        </p>
     </div>
 </div>
