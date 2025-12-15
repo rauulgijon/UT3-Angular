@@ -67,7 +67,7 @@ $shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
-  background-color: $bg-surface; // Fondo sutil para la barra
+  background-color: $bg-surface;
   padding: 15px 20px;
   border-radius: $radius;
   border: 1px solid $border-light;
@@ -78,16 +78,15 @@ $shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     gap: 10px;
-    
-    i { color: $primary; } // Si usas iconos
   }
 
+  // Igualado al estilo de Competiciones
   .btn-add {
     background: linear-gradient(135deg, $accent, darken($accent, 15%));
     color: #022c22;
     border: none;
-    padding: 10px 24px;
-    border-radius: 10px;
+    padding: 12px 24px; // Ajustado para mejor consistencia
+    border-radius: 12px; // Más redondeado
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
@@ -120,7 +119,7 @@ $shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 .modal-container {
   background-color: $bg-surface;
   width: 100%;
-  max-width: 650px; // Un poco más ancho para los partidos
+  max-width: 650px;
   border-radius: 20px;
   padding: 40px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
@@ -268,7 +267,6 @@ $shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     }
   }
 
-  // Estilos específicos para Partidos
   .badge {
     font-size: 0.75rem;
     font-weight: 800;
@@ -276,42 +274,44 @@ $shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     letter-spacing: 0.5px;
     padding: 0;
     
-    // Estado del partido
-    &.jugado { 
-      color: $accent; 
-      text-shadow: 0 0 10px rgba($accent, 0.3); 
-    }
-    
-    &.pendiente { 
-      color: #fbbf24; // Amarillo
-      text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
-    }
-    
-    &.suspendido { 
-      color: $danger;
-      text-shadow: 0 0 10px rgba($danger, 0.3);
-    }
+    &.jugado { color: $accent; text-shadow: 0 0 10px rgba($accent, 0.3); }
+    &.pendiente { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.3); }
+    &.suspendido { color: $danger; text-shadow: 0 0 10px rgba($danger, 0.3); }
   }
 
-  // Acciones
+  // --- ACCIONES (Botones de Editar/Borrar) ---
+  // Aquí es donde igualamos el estilo a Competiciones (quitamos bordes y fondo)
+  .btn-edit, .btn-delete {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    transition: all 0.2s ease;
+  }
+
   .btn-edit { 
     color: $primary; 
-    transition: 0.2s; 
-    &:hover { transform: scale(1.2); filter: drop-shadow(0 0 5px $primary); } 
+    margin-right: 10px; // Separación entre iconos
+    &:hover { 
+      transform: scale(1.2); 
+      filter: drop-shadow(0 0 5px $primary); 
+    } 
   }
   
   .btn-delete { 
     color: $danger; 
-    transition: 0.2s; 
-    &:hover { transform: scale(1.2); filter: drop-shadow(0 0 5px $danger); } 
+    &:hover { 
+      transform: scale(1.2); 
+      filter: drop-shadow(0 0 5px $danger); 
+    } 
   }
 }
 
-// Animaciones
+// Animaciones y Responsive
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-// Responsive
 @media (max-width: 768px) {
   .admin-panel { padding: 15px; }
   .header-row { flex-direction: column; align-items: flex-start; gap: 15px; }

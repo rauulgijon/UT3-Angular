@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema({
     password: { type:String, required:true },
     email: { type:String, required:true, unique:true },
     rol: { type:String, enum:['admin', 'jugador', 'arbitro'], default:'jugador' },
-    deporte: { type:String, enum:['futbol', 'brawl', 'cod'], required:false },
+    deporte: { type:String, enum:['Fútbol', 'Brawl Stars', 'Call of Duty'], required:false },
+    dni: { type:String, required:false },
+    telefono: { type:String, required:false },
 
 });
 
