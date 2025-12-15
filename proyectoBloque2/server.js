@@ -3,12 +3,15 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 
-// Importamos los modelos
+// ----------------------------------------------------
+// IMPORTACIÓN DE MODELOS
+// ----------------------------------------------------
 import Usuario from "./src/app/core/models/User.js";
 import Arbitro from "./src/app/core/models/Arbitro.js";
-// NUEVOS MODELOS (Asegúrate de que existen, ver paso 2)
 import Competicion from "./src/app/core/models/Competicion.js";
 import Partido from "./src/app/core/models/Partido.js";
+// IMPORTANTE: Faltaba esta línea en tu archivo
+import Equipo from "./src/app/core/models/Equipo.js";
 
 dotenv.config();
 const app = express();
@@ -28,7 +31,8 @@ mongoose.connect(process.env.MONGO_URI)
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await Usuario.findOne({ username, password });
+    // Populamos equipo para que el frontend sepa si el usuario ya tiene club
+    const user = await Usuario.findOne({ username, password }).populate('equipo');
     if (user) {
         res.json({ message: "Login exitoso", user });
     } else {
@@ -50,14 +54,30 @@ app.post("/api/registro", async (req, res) => {
 });
 
 // ----------------------------------------------------
-// RUTAS DE USUARIOS Y ÁRBITROS
+// RUTAS DE USUARIOS
 // ----------------------------------------------------
 app.get("/api/usuarios", async (req, res) => {
   try {
-    const usuarios = await Usuario.find();
+    const usuarios = await Usuario.find().populate('equipo');
     res.json(usuarios);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener usuarios" });
+  }
+});
+
+// Ruta para asignar equipo a un usuario (Fichaje)
+app.put("/api/usuarios/:id/asignar-equipo", async (req, res) => {
+  try {
+    const { equipoId } = req.body;
+    const usuario = await Usuario.findByIdAndUpdate(
+      req.params.id, 
+      { equipo: equipoId }, 
+      { new: true }
+    ).populate('equipo');
+    
+    res.json({ message: "Equipo asignado", usuario });
+  } catch (error) {
+    res.status(500).json({ message: "Error al asignar equipo" });
   }
 });
 
@@ -79,6 +99,9 @@ app.put("/api/usuarios/:id", async (req, res) => {
   }
 });
 
+// ----------------------------------------------------
+// RUTAS DE ÁRBITROS
+// ----------------------------------------------------
 app.get("/api/arbitros", async (req, res) => {
   try {
     const listaArbitros = await Usuario.find({ rol: 'arbitro' });
@@ -98,7 +121,29 @@ app.delete("/api/arbitros/:id", async (req, res) => {
 });
 
 // ----------------------------------------------------
-// RUTAS DE COMPETICIONES (ESTO ES LO QUE FALTABA)
+// RUTAS DE EQUIPOS (NUEVAS)
+// ----------------------------------------------------
+app.get("/api/equipos", async (req, res) => {
+  try {
+    const lista = await Equipo.find();
+    res.json(lista);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener equipos" });
+  }
+});
+
+app.post("/api/equipos", async (req, res) => {
+  try {
+    const nuevo = new Equipo(req.body);
+    await nuevo.save();
+    res.json({ message: "Equipo creado", equipo: nuevo });
+  } catch (error) {
+    res.status(500).json({ message: "Error al crear equipo" });
+  }
+});
+
+// ----------------------------------------------------
+// RUTAS DE COMPETICIONES
 // ----------------------------------------------------
 app.get("/api/competiciones", async (req, res) => {
   try {
@@ -131,7 +176,6 @@ app.put("/api/competiciones/:id", async (req, res) => {
 app.delete("/api/competiciones/:id", async (req, res) => {
   try {
     await Competicion.findByIdAndDelete(req.params.id);
-    // Opcional: Borrar también los partidos asociados
     await Partido.deleteMany({ competicion: req.params.id });
     res.json({ message: "Competición eliminada" });
   } catch (error) {
@@ -144,10 +188,15 @@ app.delete("/api/competiciones/:id", async (req, res) => {
 // ----------------------------------------------------
 app.get("/api/partidos/:competicionId", async (req, res) => {
   try {
+    // IMPORTANTE: Como has cambiado Partido.js para usar referencias,
+    // usamos populate para traer los nombres reales.
     const partidos = await Partido.find({ competicion: req.params.competicionId })
-                                  .populate('arbitro', 'username');
+                                  .populate('arbitro', 'username')
+                                  .populate('local', 'nombre escudo')
+                                  .populate('visitante', 'nombre escudo');
     res.json(partidos);
   } catch (error) {
+    console.error(error); // Para ver error en consola si falla
     res.status(500).json({ message: "Error al obtener partidos" });
   }
 });
