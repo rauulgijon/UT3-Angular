@@ -30,23 +30,20 @@ mongoose.connect(process.env.MONGO_URI)
 async function buscarOCrearEquipo(nombre, deporte) {
     if (!nombre) return null;
     
-    // 1. Limpiamos espacios y buscamos sin importar mayúsculas
     const nombreLimpio = nombre.trim();
     let equipo = await Equipo.findOne({ 
         nombre: { $regex: new RegExp(`^${nombreLimpio}$`, 'i') } 
     });
 
-    // 2. Si existe, devolvemos su ID
     if (equipo) {
         return equipo._id;
     }
 
-    // 3. Si no existe, lo creamos
     console.log(`✨ Creando equipo nuevo automáticamente: ${nombreLimpio}`);
     equipo = new Equipo({ 
         nombre: nombreLimpio,
         escudo: '',
-        deporte: deporte || 'General' // Valor por defecto
+        deporte: deporte || 'General' 
     });
     await equipo.save();
     return equipo._id;
@@ -94,7 +91,6 @@ app.get("/api/usuarios", async (req, res) => {
 
 app.put("/api/usuarios/:id", async (req, res) => {
   try {
-    // Populamos equipo para devolver el objeto completo tras actualizar
     const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('equipo');
     res.json({ message: "Usuario actualizado", usuario: usuarioActualizado });
   } catch (error) {
@@ -180,17 +176,14 @@ app.delete("/api/competiciones/:id", async (req, res) => {
 // RUTAS DE PARTIDOS
 // ----------------------------------------------------
 
-// 1. RUTA NUEVA: Ver partidos de un JUGADOR
 app.get("/api/partidos/jugador/:idUsuario", async (req, res) => {
   try {
-    // Primero buscamos al usuario para saber su equipo
     const usuario = await Usuario.findById(req.params.idUsuario);
     
     if (!usuario || !usuario.equipo) {
-        return res.json([]); // Si no tiene equipo, devolvemos array vacío
+        return res.json([]); 
     }
 
-    // Buscamos partidos donde su equipo sea Local O Visitante
     const partidos = await Partido.find({
         $or: [
             { local: usuario.equipo },
@@ -200,7 +193,7 @@ app.get("/api/partidos/jugador/:idUsuario", async (req, res) => {
     .populate('local', 'nombre escudo deporte')
     .populate('visitante', 'nombre escudo deporte')
     .populate('competicion', 'nombre')
-    .sort({ fecha: 1 }); // Ordenar por fecha
+    .sort({ fecha: 1 }); 
 
     res.json(partidos);
   } catch (error) {
@@ -209,7 +202,6 @@ app.get("/api/partidos/jugador/:idUsuario", async (req, res) => {
   }
 });
 
-// 2. Ruta para Árbitros
 app.get("/api/partidos/arbitro/:id", async (req, res) => {
   try {
     const partidos = await Partido.find({ arbitro: req.params.id })
@@ -222,7 +214,6 @@ app.get("/api/partidos/arbitro/:id", async (req, res) => {
   }
 });
 
-// 3. Ruta para Admin (por competición)
 app.get("/api/partidos/:competicionId", async (req, res) => {
   try {
     const partidos = await Partido.find({ competicion: req.params.competicionId })
@@ -236,16 +227,13 @@ app.get("/api/partidos/:competicionId", async (req, res) => {
   }
 });
 
-// 4. Crear Partido (con equipos automáticos y deporte)
 app.post("/api/partidos", async (req, res) => {
   try {
     const { local, visitante, fecha, hora, arbitro, competicion, deporte } = req.body;
 
-    // Resolvemos equipos (crear si no existen)
     const localId = await buscarOCrearEquipo(local, deporte);
     const visitanteId = await buscarOCrearEquipo(visitante, deporte);
 
-    // Limpiamos árbitro vacío
     const arbitroLimpio = (arbitro && arbitro !== "") ? arbitro : null;
 
     const nuevo = new Partido({
@@ -267,13 +255,11 @@ app.post("/api/partidos", async (req, res) => {
   }
 });
 
-// 5. Editar Partido
 app.put("/api/partidos/:id", async (req, res) => {
   try {
     const datos = { ...req.body };
     const deporte = datos.deporte;
 
-    // Si vienen nombres de equipos, recalcular IDs
     if (datos.local) datos.local = await buscarOCrearEquipo(datos.local, deporte);
     if (datos.visitante) datos.visitante = await buscarOCrearEquipo(datos.visitante, deporte);
 

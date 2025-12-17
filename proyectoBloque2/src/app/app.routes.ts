@@ -5,7 +5,6 @@ import { RegistroComponent } from './components/registro/registro';
 import { AdminComponent } from './components/admin/admin';
 import { UsuariosAdminComponent } from './components/admin/usuariosAdmin/usuariosAdmin';
 import { ArbitrosAdminComponent } from './components/admin/arbitrosAdmin/arbitrosAdmin';
-// IMPORTANTE: Importar los nuevos componentes
 import { CompeticionesAdminComponent } from './components/admin/competicionesAdmin/competicionesAdmin';
 import { PartidosAdminComponent } from './components/admin/partidosAdmin/partidosAdmin';
 
@@ -17,17 +16,14 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
     
-    // Panel Principal Admin
     { path: 'admin', component: AdminComponent }, 
     
-    // Secciones del Admin
     { path: 'admin/usuariosAdmin', component: UsuariosAdminComponent },
     { path: 'admin/arbitrosAdmin', component: ArbitrosAdminComponent },
     
     { path: 'admin/competiciones', component: CompeticionesAdminComponent },
     { path: 'admin/competiciones/:id/partidos', component: PartidosAdminComponent },
 
-    // Pantallas de otros roles
     { path: 'arbitro', component: ArbitroComponent},
     { path: 'jugador', component: JugadorComponent}
 ];

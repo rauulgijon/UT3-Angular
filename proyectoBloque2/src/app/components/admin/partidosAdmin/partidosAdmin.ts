@@ -23,11 +23,10 @@ export class PartidosAdminComponent implements OnInit {
     mostrarFormulario: boolean = false;
     idEdicion: string | null = null;
 
-    // Modelo para el formulario (Incluye Deporte)
     nuevoPartido = {
         local: '',
         visitante: '',
-        deporte: '', // <--- NUEVO CAMPO
+        deporte: '', //
         fecha: '',
         hora: '',
         arbitro: '',
@@ -63,7 +62,6 @@ export class PartidosAdminComponent implements OnInit {
             return;
         }
 
-        // Validación extra
         if (!this.nuevoPartido.deporte) {
             alert('Por favor selecciona un deporte');
             return;
@@ -85,14 +83,13 @@ export class PartidosAdminComponent implements OnInit {
     editar(partido: any) {
         this.idEdicion = partido._id;
         
-        // Intentamos recuperar el deporte de uno de los equipos ya existentes
         const deporteExistente = partido.local?.deporte || 'Fútbol';
 
         this.nuevoPartido = { 
             ...partido,
             local: partido.local?.nombre || partido.local || '',
             visitante: partido.visitante?.nombre || partido.visitante || '',
-            deporte: deporteExistente, // Rellenamos el select
+            deporte: deporteExistente, 
             arbitro: partido.arbitro?._id || partido.arbitro || '' 
         };
         
@@ -108,7 +105,6 @@ export class PartidosAdminComponent implements OnInit {
     cerrarFormulario() {
         this.mostrarFormulario = false;
         this.idEdicion = null;
-        // Reseteamos el formulario
         this.nuevoPartido = {
             local: '', visitante: '', deporte: '',
             fecha: '', hora: '', 

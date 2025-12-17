@@ -6,12 +6,10 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     rol: { type: String, enum: ['admin', 'jugador', 'arbitro'], default: 'jugador' },
     
-    // Tus campos extras
     deporte: { type: String, required: false },
     dni: { type: String, required: false },
     telefono: { type: String, required: false },
 
-    // --- ESTO ES LO QUE FALTABA ---
     equipo: { type: mongoose.Schema.Types.ObjectId, ref: 'Equipo', required: false }
 });
 

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
 const partidoSchema = new mongoose.Schema({
-    // CAMBIO: Ahora son referencias (ObjectIds) en lugar de Strings simples
     local: { type: mongoose.Schema.Types.ObjectId, ref: 'Equipo', required: true },
     visitante: { type: mongoose.Schema.Types.ObjectId, ref: 'Equipo', required: true },
     

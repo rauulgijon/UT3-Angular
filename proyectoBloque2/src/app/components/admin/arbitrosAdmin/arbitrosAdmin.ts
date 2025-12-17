@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router'; // <--- Importante para el botón de volver
+import { RouterModule } from '@angular/router'; 
 import { AdminService } from '../../../core/services/admin.service';
 
 @Component({
   selector: 'app-arbitros-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule], // <--- Añadido aquí
+  imports: [CommonModule, FormsModule, RouterModule], 
   templateUrl: './arbitrosAdmin.html',
   styleUrl: './arbitrosAdmin.scss'
 })
@@ -18,7 +18,6 @@ export class ArbitrosAdminComponent implements OnInit {
   mostrarFormulario: boolean = false;
   idEdicion: string | null = null;
 
-  // Modelo completo con todos los datos
   nuevoArbitro = {
     username: '',
     email: '',
@@ -26,7 +25,7 @@ export class ArbitrosAdminComponent implements OnInit {
     dni: '',
     telefono: '',
     deporte: '',
-    rol: 'arbitro' // Siempre será árbitro
+    rol: 'arbitro' 
   };
 
   ngOnInit() {
@@ -41,15 +40,12 @@ export class ArbitrosAdminComponent implements OnInit {
   }
 
   guardar() {
-    // Validaciones básicas
     if (!this.nuevoArbitro.username || !this.nuevoArbitro.email) {
       alert('Nombre y Email son obligatorios');
       return;
     }
 
     if (this.idEdicion) {
-      // --- EDITAR ÁRBITRO EXISTENTE ---
-      // Si la contraseña está vacía, la quitamos para no sobrescribirla
       const datosActualizar = { ...this.nuevoArbitro };
       if (!datosActualizar.password) {
         delete (datosActualizar as any).password;
@@ -64,7 +60,6 @@ export class ArbitrosAdminComponent implements OnInit {
       });
 
     } else {
-      // --- CREAR NUEVO ÁRBITRO ---
       if (!this.nuevoArbitro.password) {
         alert('La contraseña es obligatoria para nuevos árbitros');
         return;
@@ -82,11 +77,10 @@ export class ArbitrosAdminComponent implements OnInit {
 
   editar(arbitro: any) {
     this.idEdicion = arbitro._id;
-    // Copiamos los datos al formulario
     this.nuevoArbitro = { 
       username: arbitro.username,
       email: arbitro.email,
-      password: '', // La contraseña no se muestra por seguridad
+      password: '', 
       dni: arbitro.dni || '',
       telefono: arbitro.telefono || '',
       deporte: arbitro.deporte || '',

@@ -18,18 +18,16 @@ export class LoginComponent {
 
     constructor(private authService: AuthService, private router: Router) { }
 
-    // En src/app/components/login/login.ts
 
     login() {
         console.log('Intentando login con', this.username, this.password);
         this.authService.login(this.username, this.password).subscribe({
             next: res => {
-                console.log('Respuesta del servidor:', res); // 1. Ver qué llega exactamente
+                console.log('Respuesta del servidor:', res); 
 
                 if (res.user) {
                     localStorage.setItem('usuario', JSON.stringify(res.user));
 
-                    // Normalizamos el rol a minúsculas para evitar errores de mayúsculas
                     const rol = res.user.rol ? res.user.rol.toLowerCase().trim() : '';
                     console.log('Rol detectado (normalizado):', rol);
 

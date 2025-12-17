@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router'; // <--- IMPORTANTE: Necesario para que funcione el botón de volver
+import { RouterModule } from '@angular/router'; 
 import { AdminService } from '../../../core/services/admin.service';
 
 @Component({
     selector: 'app-usuarios-admin',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterModule], // <--- IMPORTANTE: Añadirlo aquí también
+    imports: [CommonModule, FormsModule, RouterModule],
     templateUrl: './usuariosAdmin.html',
     styleUrl: './usuariosAdmin.scss'
 })
@@ -65,7 +65,6 @@ export class UsuariosAdminComponent implements OnInit {
         }
 
         if (this.idEdicion) {
-            // Si no se escribe contraseña nueva, la quitamos del objeto para no enviarla vacía
             if (!this.nuevoUsuario.password) {
                 delete this.nuevoUsuario.password;
             }
@@ -90,7 +89,6 @@ export class UsuariosAdminComponent implements OnInit {
 
     editar(item: any) {
         this.idEdicion = item._id;
-        // Copiamos el objeto para no modificar la tabla directamente
         this.nuevoUsuario = { ...item, password: '' }; 
         this.mostrarFormulario = true;
     }

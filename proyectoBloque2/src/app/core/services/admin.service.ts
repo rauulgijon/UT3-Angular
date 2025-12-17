@@ -42,7 +42,7 @@ export class AdminService {
   }
 
   // ==========================================
-  //      GESTIÓN DE EQUIPOS (NUEVO)
+  //      GESTIÓN DE EQUIPOS
   // ==========================================
   obtenerEquipos(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/equipos`);
@@ -95,7 +95,7 @@ export class AdminService {
     return this.http.get<any[]>(`${this.apiUrl}/partidos/arbitro/${idArbitro}`);
   }
 
-  // Para el Jugador (NUEVO)
+  // Para el Jugador
   obtenerMisPartidos(idUsuario: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/partidos/jugador/${idUsuario}`);
   }
