@@ -7,10 +7,8 @@ import dotenv from "dotenv";
 // IMPORTACIÓN DE MODELOS
 // ----------------------------------------------------
 import Usuario from "./src/app/core/models/User.js";
-import Arbitro from "./src/app/core/models/Arbitro.js";
 import Competicion from "./src/app/core/models/Competicion.js";
 import Partido from "./src/app/core/models/Partido.js";
-// IMPORTANTE: Faltaba esta línea en tu archivo
 import Equipo from "./src/app/core/models/Equipo.js";
 
 dotenv.config();
@@ -25,13 +23,41 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("¡¡¡Conectado a MongoDB!!!"))
   .catch(err => console.log("Error MongoDB :(", err));
 
+
+// ==========================================
+//  FUNCIÓN MÁGICA: Buscar o Crear Equipo
+// ==========================================
+async function buscarOCrearEquipo(nombre) {
+    if (!nombre) return null;
+    
+    // 1. Limpiamos espacios y buscamos sin importar mayúsculas
+    const nombreLimpio = nombre.trim();
+    let equipo = await Equipo.findOne({ 
+        nombre: { $regex: new RegExp(`^${nombreLimpio}$`, 'i') } 
+    });
+
+    // 2. Si existe, devolvemos su ID
+    if (equipo) {
+        return equipo._id;
+    }
+
+    // 3. Si no existe, lo creamos
+    console.log(`✨ Creando equipo nuevo automáticamente: ${nombreLimpio}`);
+    equipo = new Equipo({ 
+        nombre: nombreLimpio,
+        escudo: '' 
+    });
+    await equipo.save();
+    return equipo._id;
+}
+
+
 // ----------------------------------------------------
 // RUTAS DE AUTENTICACIÓN
 // ----------------------------------------------------
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   try {
-    // Populamos equipo para que el frontend sepa si el usuario ya tiene club
     const user = await Usuario.findOne({ username, password }).populate('equipo');
     if (user) {
         res.json({ message: "Login exitoso", user });
@@ -65,19 +91,12 @@ app.get("/api/usuarios", async (req, res) => {
   }
 });
 
-// Ruta para asignar equipo a un usuario (Fichaje)
-app.put("/api/usuarios/:id/asignar-equipo", async (req, res) => {
+app.put("/api/usuarios/:id", async (req, res) => {
   try {
-    const { equipoId } = req.body;
-    const usuario = await Usuario.findByIdAndUpdate(
-      req.params.id, 
-      { equipo: equipoId }, 
-      { new: true }
-    ).populate('equipo');
-    
-    res.json({ message: "Equipo asignado", usuario });
+    const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ message: "Usuario actualizado", usuario: usuarioActualizado });
   } catch (error) {
-    res.status(500).json({ message: "Error al asignar equipo" });
+    res.status(500).json({ message: "Error al actualizar" });
   }
 });
 
@@ -90,17 +109,8 @@ app.delete("/api/usuarios/:id", async (req, res) => {
   }
 });
 
-app.put("/api/usuarios/:id", async (req, res) => {
-  try {
-    const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json({ message: "Usuario actualizado", usuario: usuarioActualizado });
-  } catch (error) {
-    res.status(500).json({ message: "Error al actualizar" });
-  }
-});
-
 // ----------------------------------------------------
-// RUTAS DE ÁRBITROS
+// RUTAS DE ÁRBITROS (Usuario con rol='arbitro')
 // ----------------------------------------------------
 app.get("/api/arbitros", async (req, res) => {
   try {
@@ -111,17 +121,8 @@ app.get("/api/arbitros", async (req, res) => {
   }
 });
 
-app.delete("/api/arbitros/:id", async (req, res) => {
-  try {
-    await Usuario.findByIdAndDelete(req.params.id);
-    res.json({ message: "Árbitro eliminado" });
-  } catch (error) {
-    res.status(500).json({ message: "Error al eliminar" });
-  }
-});
-
 // ----------------------------------------------------
-// RUTAS DE EQUIPOS (NUEVAS)
+// RUTAS DE EQUIPOS
 // ----------------------------------------------------
 app.get("/api/equipos", async (req, res) => {
   try {
@@ -129,16 +130,6 @@ app.get("/api/equipos", async (req, res) => {
     res.json(lista);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener equipos" });
-  }
-});
-
-app.post("/api/equipos", async (req, res) => {
-  try {
-    const nuevo = new Equipo(req.body);
-    await nuevo.save();
-    res.json({ message: "Equipo creado", equipo: nuevo });
-  } catch (error) {
-    res.status(500).json({ message: "Error al crear equipo" });
   }
 });
 
@@ -184,48 +175,72 @@ app.delete("/api/competiciones/:id", async (req, res) => {
 });
 
 // ----------------------------------------------------
-// RUTAS DE PARTIDOS
+// RUTAS DE PARTIDOS (Con lógica de equipos automática)
 // ----------------------------------------------------
 
-// Ruta específica para que el árbitro vea SUS partidos
 app.get("/api/partidos/arbitro/:id", async (req, res) => {
   try {
     const partidos = await Partido.find({ arbitro: req.params.id })
       .populate('local', 'nombre escudo')
-      .populate('visitante', 'nombre escudo');
+      .populate('visitante', 'nombre escudo')
+      .populate('competicion', 'nombre');
     res.json(partidos);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener partidos del árbitro" });
   }
 });
+
 app.get("/api/partidos/:competicionId", async (req, res) => {
   try {
-    // IMPORTANTE: Como has cambiado Partido.js para usar referencias,
-    // usamos populate para traer los nombres reales.
     const partidos = await Partido.find({ competicion: req.params.competicionId })
                                   .populate('arbitro', 'username')
                                   .populate('local', 'nombre escudo')
                                   .populate('visitante', 'nombre escudo');
     res.json(partidos);
   } catch (error) {
-    console.error(error); // Para ver error en consola si falla
+    console.error(error); 
     res.status(500).json({ message: "Error al obtener partidos" });
   }
 });
 
+// CREAR PARTIDO (Busca o crea equipos)
 app.post("/api/partidos", async (req, res) => {
   try {
-    const nuevo = new Partido(req.body);
+    const { local, visitante, fecha, hora, arbitro, competicion } = req.body;
+
+    // Resolvemos los IDs de los equipos (creándolos si hace falta)
+    const localId = await buscarOCrearEquipo(local);
+    const visitanteId = await buscarOCrearEquipo(visitante);
+
+    const nuevo = new Partido({
+        local: localId,
+        visitante: visitanteId,
+        fecha,
+        hora,
+        arbitro,
+        competicion,
+        resultado: '-/-',
+        estado: 'Pendiente'
+    });
+
     await nuevo.save();
     res.json({ message: "Partido creado", partido: nuevo });
   } catch (error) {
-    res.status(500).json({ message: "Error al crear" });
+    console.error(error);
+    res.status(500).json({ message: "Error al crear", error: error.message });
   }
 });
 
+// EDITAR PARTIDO (También permite cambiar nombres de equipo)
 app.put("/api/partidos/:id", async (req, res) => {
   try {
-    const actualizado = await Partido.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const datos = { ...req.body };
+
+    // Si vienen nombres de equipos, recalcular IDs
+    if (datos.local) datos.local = await buscarOCrearEquipo(datos.local);
+    if (datos.visitante) datos.visitante = await buscarOCrearEquipo(datos.visitante);
+
+    const actualizado = await Partido.findByIdAndUpdate(req.params.id, datos, { new: true });
     res.json({ message: "Partido actualizado", partido: actualizado });
   } catch (error) {
     res.status(500).json({ message: "Error al actualizar" });
@@ -241,6 +256,5 @@ app.delete("/api/partidos/:id", async (req, res) => {
   }
 });
 
-// Arrancar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));

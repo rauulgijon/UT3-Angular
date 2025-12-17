@@ -9,7 +9,7 @@ import { AdminService } from '../../../core/services/admin.service';
     standalone: true,
     imports: [CommonModule, FormsModule, RouterModule],
     templateUrl: './partidosAdmin.html',
-    styleUrl: './partidosAdmin.scss' // Reusaremos el estilo base
+    styleUrl: './partidosAdmin.scss'
 })
 export class PartidosAdminComponent implements OnInit {
     
@@ -18,11 +18,12 @@ export class PartidosAdminComponent implements OnInit {
 
     competicionId: string = '';
     listaPartidos: any[] = [];
-    listaArbitros: any[] = []; // Para el select del modal
+    listaArbitros: any[] = []; 
 
     mostrarFormulario: boolean = false;
     idEdicion: string | null = null;
 
+    // Modelo para el formulario
     nuevoPartido = {
         local: '',
         visitante: '',
@@ -35,7 +36,6 @@ export class PartidosAdminComponent implements OnInit {
     };
 
     ngOnInit() {
-        // 1. Obtener ID de la competición de la URL
         this.competicionId = this.route.snapshot.paramMap.get('id') || '';
         this.nuevoPartido.competicion = this.competicionId;
 
@@ -58,7 +58,7 @@ export class PartidosAdminComponent implements OnInit {
 
     guardar() {
         if (!this.nuevoPartido.local || !this.nuevoPartido.visitante) {
-            alert('Indica los equipos local y visitante');
+            alert('Debes escribir el nombre de los equipos');
             return;
         }
 
@@ -77,11 +77,19 @@ export class PartidosAdminComponent implements OnInit {
 
     editar(partido: any) {
         this.idEdicion = partido._id;
-        // Importante: Si el árbitro viene poblado (objeto), cogemos solo su ID para el select
+        
+        // --- TRUCO IMPORTANTE ---
+        // El servidor nos devuelve objetos completos para local y visitante (con _id, nombre, escudo...)
+        // Pero nuestro input quiere solo el NOMBRE (string).
+        // Extraemos el nombre para que aparezca escrito en el formulario.
+        
         this.nuevoPartido = { 
-            ...partido, 
+            ...partido,
+            local: partido.local?.nombre || partido.local || '',
+            visitante: partido.visitante?.nombre || partido.visitante || '',
             arbitro: partido.arbitro?._id || partido.arbitro || '' 
         };
+        
         this.mostrarFormulario = true;
     }
 
@@ -94,6 +102,7 @@ export class PartidosAdminComponent implements OnInit {
     cerrarFormulario() {
         this.mostrarFormulario = false;
         this.idEdicion = null;
+        // Reseteamos el formulario
         this.nuevoPartido = {
             local: '', visitante: '', fecha: '', hora: '', 
             arbitro: '', estado: 'Pendiente', resultado: '-/-',
