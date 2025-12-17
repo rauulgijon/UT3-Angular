@@ -38,6 +38,17 @@
             <h3>{{ idEdicion ? 'Editar Partido' : 'Nuevo Partido' }}</h3>
             
             <form (ngSubmit)="guardar()">
+                
+                <div class="form-group">
+                    <label>Deporte</label>
+                    <select [(ngModel)]="nuevoPartido.deporte" name="deporte" required>
+                        <option value="" disabled>Selecciona un deporte</option>
+                        <option value="Fútbol">Fútbol</option>
+                        <option value="Brawl Stars">Brawl Stars</option>
+                        <option value="Call of Duty">Call of Duty</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label>Equipo Local</label>
                     <input type="text" [(ngModel)]="nuevoPartido.local" name="local" placeholder="Ej: Los Tigres" required>
@@ -62,7 +73,7 @@
                 <div class="form-group">
                     <label>Árbitro</label>
                     <select [(ngModel)]="nuevoPartido.arbitro" name="arbitro">
-                        <option value="">-- Seleccionar Árbitro --</option>
+                        <option value="">-- Sin Árbitro --</option>
                         <option *ngFor="let arb of listaArbitros" [value]="arb._id">
                             {{ arb.username }}
                         </option>

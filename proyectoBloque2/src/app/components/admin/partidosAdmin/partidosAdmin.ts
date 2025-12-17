@@ -23,10 +23,11 @@ export class PartidosAdminComponent implements OnInit {
     mostrarFormulario: boolean = false;
     idEdicion: string | null = null;
 
-    // Modelo para el formulario
+    // Modelo para el formulario (Incluye Deporte)
     nuevoPartido = {
         local: '',
         visitante: '',
+        deporte: '', // <--- NUEVO CAMPO
         fecha: '',
         hora: '',
         arbitro: '',
@@ -62,6 +63,12 @@ export class PartidosAdminComponent implements OnInit {
             return;
         }
 
+        // Validación extra
+        if (!this.nuevoPartido.deporte) {
+            alert('Por favor selecciona un deporte');
+            return;
+        }
+
         if (this.idEdicion) {
             this.adminService.actualizarPartido(this.idEdicion, this.nuevoPartido).subscribe(() => {
                 this.cerrarFormulario();
@@ -78,15 +85,14 @@ export class PartidosAdminComponent implements OnInit {
     editar(partido: any) {
         this.idEdicion = partido._id;
         
-        // --- TRUCO IMPORTANTE ---
-        // El servidor nos devuelve objetos completos para local y visitante (con _id, nombre, escudo...)
-        // Pero nuestro input quiere solo el NOMBRE (string).
-        // Extraemos el nombre para que aparezca escrito en el formulario.
-        
+        // Intentamos recuperar el deporte de uno de los equipos ya existentes
+        const deporteExistente = partido.local?.deporte || 'Fútbol';
+
         this.nuevoPartido = { 
             ...partido,
             local: partido.local?.nombre || partido.local || '',
             visitante: partido.visitante?.nombre || partido.visitante || '',
+            deporte: deporteExistente, // Rellenamos el select
             arbitro: partido.arbitro?._id || partido.arbitro || '' 
         };
         
@@ -104,7 +110,8 @@ export class PartidosAdminComponent implements OnInit {
         this.idEdicion = null;
         // Reseteamos el formulario
         this.nuevoPartido = {
-            local: '', visitante: '', fecha: '', hora: '', 
+            local: '', visitante: '', deporte: '',
+            fecha: '', hora: '', 
             arbitro: '', estado: 'Pendiente', resultado: '-/-',
             competicion: this.competicionId
         };
