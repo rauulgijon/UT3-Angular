@@ -16,21 +16,19 @@ export class ArbitroComponent implements OnInit {
   usuario: any = {};
   partidosAsignados: any[] = [];
   
-  // Variables para el modal
+  vistaActual: 'partidos' | 'perfil' = 'partidos';
+
   mostrarModal: boolean = false;
   partidoSeleccionado: any = null;
   nuevoResultado: string = '';
 
   ngOnInit() {
-    // 1. Verificar si hay usuario guardado
     const userStr = localStorage.getItem('usuario');
-    
     if (userStr) {
       this.usuario = JSON.parse(userStr);
-      // 2. Si es árbitro, cargamos sus partidos
+      if (!this.usuario.deporte) this.usuario.deporte = ""; 
       this.cargarPartidos();
     } else {
-        // 3. Si no hay usuario, expulsar al login
         window.location.href = '/login';
     }
   }
@@ -42,6 +40,20 @@ export class ArbitroComponent implements OnInit {
     });
   }
 
+  guardarPerfil() {
+    this.adminService.actualizarUsuario(this.usuario._id, this.usuario).subscribe({
+      next: (res) => {
+          alert('Perfil guardado correctamente');
+          if(res && res.usuario) this.usuario = res.usuario;
+          localStorage.setItem('usuario', JSON.stringify(this.usuario));
+      },
+      error: (e) => {
+          console.error(e);
+          alert('Error al guardar el perfil.');
+      }
+    });
+  }
+
   abrirActa(partido: any) {
       this.partidoSeleccionado = partido;
       this.nuevoResultado = partido.resultado || ''; 
@@ -50,7 +62,6 @@ export class ArbitroComponent implements OnInit {
 
   guardarActa() {
       if(!this.partidoSeleccionado) return;
-
       this.adminService.actualizarResultado(this.partidoSeleccionado._id, this.nuevoResultado).subscribe({
           next: () => {
               alert('Acta guardada correctamente');

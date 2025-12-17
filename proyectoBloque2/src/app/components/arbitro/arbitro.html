@@ -1,45 +1,114 @@
-<div class="arbitro-container">
-    <header class="arbitro-header">
-        <h1>Panel Arbitral | {{ usuario.username }}</h1>
-        <button (click)="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
-    </header>
-
-    <div class="content-wrapper">
-        <h3>Partidos Asignados</h3>
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Encuentro</th>
-                        <th>Deporte</th>
-                        <th>Resultado Actual</th>
-                        <th style="text-align: center;">Acta</th>
-                    </tr>
-                </thead>
-                <tr *ngFor="let p of partidosAsignados">
-                    <td data-label="Fecha">{{ p.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
-                    <td data-label="Encuentro" class="match-teams">{{ p.equipoLocal }} <b>VS</b> {{ p.equipoVisitante }}
-                    </td>
-                    <td data-label="Deporte">{{ p.deporte || '-' }}</td>
-                    <td data-label="Estado">
-                        <span class="badge" [ngClass]="p.resultado ? 'done' : 'pending'">
-                            {{ p.resultado ? p.resultado : 'Pendiente' }}
-                        </span>
-                    </td>
-                    <td data-label="Acción" style="text-align: center;">
-                        <button class="btn-edit-acta" (click)="abrirActa(p)">
-                            📝 Rellenar / Editar
-                        </button>
-                    </td>
-                </tr>
-            </table>
-
-            <p *ngIf="partidosAsignados.length === 0" class="no-data">
-                No tienes partidos asignados actualmente.
-            </p>
+<div class="arbitro-layout">
+    
+    <nav class="glass-navbar">
+        <div class="nav-brand">
+            <span class="logo-text">Panel Arbitral | <span class="highlight">{{ usuario.username }}</span></span>
         </div>
+        
+        <div class="nav-links">
+            <button (click)="vistaActual = 'partidos'" [class.active]="vistaActual === 'partidos'">
+                <span class="icon">📋</span> Partidos
+            </button>
+            <button (click)="vistaActual = 'perfil'" [class.active]="vistaActual === 'perfil'">
+                <span class="icon">👤</span> Mi Perfil
+            </button>
+            <button (click)="cerrarSesion()" class="btn-logout">
+                <span class="icon">🚪</span> Salir
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-container fade-in">
+        
+        <div *ngIf="vistaActual === 'partidos'" class="section-wrapper">
+            <header class="section-header">
+                <h2>Encuentros Asignados</h2>
+                <p class="subtitle">Gestiona las actas oficiales de tus partidos.</p>
+            </header>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Encuentro</th>
+                            <th>Deporte</th>
+                            <th>Estado</th>
+                            <th style="text-align: center;">Acta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of partidosAsignados">
+                            <td>{{ p.fecha | date:'dd MMM • HH:mm' }}</td>
+                            <td class="match-teams">
+                                {{ p.equipoLocal || p.local?.nombre || 'Local' }} 
+                                <b>VS</b> 
+                                {{ p.equipoVisitante || p.visitante?.nombre || 'Visitante' }}
+                            </td>
+                            <td>{{ p.deporte || '-' }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="p.resultado && p.resultado !== '-/-' ? 'done' : 'pending'">
+                                    {{ p.resultado && p.resultado !== '-/-' ? p.resultado : 'Pendiente' }}
+                                </span>
+                            </td>
+                            <td style="text-align: center;">
+                                <button class="btn-edit-acta" (click)="abrirActa(p)">
+                                    📝 Editar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div *ngIf="partidosAsignados.length === 0" class="no-data">
+                    <p>No tienes partidos asignados actualmente.</p>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="vistaActual === 'perfil'" class="section-wrapper profile-center">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar-large">{{ usuario.username.charAt(0).toUpperCase() }}</div>
+                    <h3>{{ usuario.username }}</h3>
+                    <span class="role-badge">Árbitro Oficial</span>
+                </div>
+
+                <div class="profile-body">
+                    <div class="input-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" [(ngModel)]="usuario.email">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Teléfono</label>
+                        <input type="text" [(ngModel)]="usuario.telefono" placeholder="600 000 000">
+                    </div>
+
+                    <div class="input-group">
+                        <label>DNI / Identificación</label>
+                        <input type="text" [(ngModel)]="usuario.dni" placeholder="12345678X">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Especialidad</label>
+                        <select [(ngModel)]="usuario.deporte" class="input-select">
+                            <option value="" disabled>Selecciona deporte</option>
+                            <option value="Fútbol">Fútbol</option>
+                            <option value="Brawl Stars">Brawl Stars</option>
+                            <option value="Call of Duty">Call of Duty</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="profile-footer">
+                    <button class="btn-save-glow" (click)="guardarPerfil()">
+                        Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="modal-overlay" *ngIf="mostrarModal">
@@ -50,17 +119,20 @@
             </div>
 
             <div class="modal-body">
-                <p class="teams-title">{{ partidoSeleccionado?.equipoLocal }} vs {{ partidoSeleccionado?.equipoVisitante
-                    }}</p>
+                <div class="teams-title">
+                    {{ partidoSeleccionado?.equipoLocal || partidoSeleccionado?.local?.nombre }} 
+                    vs 
+                    {{ partidoSeleccionado?.equipoVisitante || partidoSeleccionado?.visitante?.nombre }}
+                </div>
 
-                <label>Resultado Final:</label>
+                <label>Resultado Final</label>
                 <input type="text" [(ngModel)]="nuevoResultado" placeholder="Ej: 3 - 1" class="input-score">
-                <small>Introduce el marcador final del encuentro.</small>
+                <small>Introduce el marcador para cerrar el acta.</small>
             </div>
 
             <div class="modal-footer">
                 <button (click)="mostrarModal = false" class="btn-cancel">Cancelar</button>
-                <button (click)="guardarActa()" class="btn-confirm">Confirmar Resultado</button>
+                <button (click)="guardarActa()" class="btn-confirm">Confirmar</button>
             </div>
         </div>
     </div>
