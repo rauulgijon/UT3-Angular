@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 // ==========================================
-//  FUNCIÓN MÁGICA: Buscar o Crear Equipo
+// Buscar o Crear Equipo
 // ==========================================
 async function buscarOCrearEquipo(nombre, deporte) {
     if (!nombre) return null;
