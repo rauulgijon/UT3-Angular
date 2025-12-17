@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 // ==========================================
-//  FUNCIÓN MÁGICA: Buscar o Crear Equipo (Con Deporte)
+//  FUNCIÓN MÁGICA: Buscar o Crear Equipo
 // ==========================================
 async function buscarOCrearEquipo(nombre, deporte) {
     if (!nombre) return null;
@@ -41,13 +41,12 @@ async function buscarOCrearEquipo(nombre, deporte) {
         return equipo._id;
     }
 
-    // 3. Si no existe, lo creamos USANDO EL DEPORTE
-    // Si no nos pasan deporte, ponemos 'General' para que no falle la base de datos
-    console.log(`✨ Creando equipo nuevo: ${nombreLimpio} (${deporte})`);
+    // 3. Si no existe, lo creamos
+    console.log(`✨ Creando equipo nuevo automáticamente: ${nombreLimpio}`);
     equipo = new Equipo({ 
         nombre: nombreLimpio,
         escudo: '',
-        deporte: deporte || 'General' 
+        deporte: deporte || 'General' // Valor por defecto
     });
     await equipo.save();
     return equipo._id;
@@ -95,7 +94,8 @@ app.get("/api/usuarios", async (req, res) => {
 
 app.put("/api/usuarios/:id", async (req, res) => {
   try {
-    const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    // Populamos equipo para devolver el objeto completo tras actualizar
+    const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('equipo');
     res.json({ message: "Usuario actualizado", usuario: usuarioActualizado });
   } catch (error) {
     res.status(500).json({ message: "Error al actualizar" });
@@ -177,14 +177,44 @@ app.delete("/api/competiciones/:id", async (req, res) => {
 });
 
 // ----------------------------------------------------
-// RUTAS DE PARTIDOS (Con lógica de equipos automática + Deporte)
+// RUTAS DE PARTIDOS
 // ----------------------------------------------------
 
+// 1. RUTA NUEVA: Ver partidos de un JUGADOR
+app.get("/api/partidos/jugador/:idUsuario", async (req, res) => {
+  try {
+    // Primero buscamos al usuario para saber su equipo
+    const usuario = await Usuario.findById(req.params.idUsuario);
+    
+    if (!usuario || !usuario.equipo) {
+        return res.json([]); // Si no tiene equipo, devolvemos array vacío
+    }
+
+    // Buscamos partidos donde su equipo sea Local O Visitante
+    const partidos = await Partido.find({
+        $or: [
+            { local: usuario.equipo },
+            { visitante: usuario.equipo }
+        ]
+    })
+    .populate('local', 'nombre escudo deporte')
+    .populate('visitante', 'nombre escudo deporte')
+    .populate('competicion', 'nombre')
+    .sort({ fecha: 1 }); // Ordenar por fecha
+
+    res.json(partidos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener partidos del jugador" });
+  }
+});
+
+// 2. Ruta para Árbitros
 app.get("/api/partidos/arbitro/:id", async (req, res) => {
   try {
     const partidos = await Partido.find({ arbitro: req.params.id })
-      .populate('local', 'nombre escudo')
-      .populate('visitante', 'nombre escudo')
+      .populate('local', 'nombre escudo deporte')
+      .populate('visitante', 'nombre escudo deporte')
       .populate('competicion', 'nombre');
     res.json(partidos);
   } catch (error) {
@@ -192,12 +222,13 @@ app.get("/api/partidos/arbitro/:id", async (req, res) => {
   }
 });
 
+// 3. Ruta para Admin (por competición)
 app.get("/api/partidos/:competicionId", async (req, res) => {
   try {
     const partidos = await Partido.find({ competicion: req.params.competicionId })
                                   .populate('arbitro', 'username')
-                                  .populate('local', 'nombre escudo')
-                                  .populate('visitante', 'nombre escudo');
+                                  .populate('local', 'nombre escudo deporte')
+                                  .populate('visitante', 'nombre escudo deporte');
     res.json(partidos);
   } catch (error) {
     console.error(error); 
@@ -205,16 +236,16 @@ app.get("/api/partidos/:competicionId", async (req, res) => {
   }
 });
 
-// CREAR PARTIDO (Recibe 'deporte' para crear equipos)
+// 4. Crear Partido (con equipos automáticos y deporte)
 app.post("/api/partidos", async (req, res) => {
   try {
     const { local, visitante, fecha, hora, arbitro, competicion, deporte } = req.body;
 
-    // 1. Resolvemos equipos pasando el deporte
+    // Resolvemos equipos (crear si no existen)
     const localId = await buscarOCrearEquipo(local, deporte);
     const visitanteId = await buscarOCrearEquipo(visitante, deporte);
 
-    // 2. Limpiamos árbitro (si es "" pasa a null)
+    // Limpiamos árbitro vacío
     const arbitroLimpio = (arbitro && arbitro !== "") ? arbitro : null;
 
     const nuevo = new Partido({
@@ -231,30 +262,26 @@ app.post("/api/partidos", async (req, res) => {
     await nuevo.save();
     res.json({ message: "Partido creado", partido: nuevo });
   } catch (error) {
-    console.error("Error al crear partido:", error);
+    console.error(error);
     res.status(500).json({ message: "Error al crear", error: error.message });
   }
 });
 
-// EDITAR PARTIDO
+// 5. Editar Partido
 app.put("/api/partidos/:id", async (req, res) => {
   try {
     const datos = { ...req.body };
-    const deporte = datos.deporte; // Extraemos deporte
+    const deporte = datos.deporte;
 
-    // 1. Si vienen nombres de equipos, recalcular IDs usando el deporte
+    // Si vienen nombres de equipos, recalcular IDs
     if (datos.local) datos.local = await buscarOCrearEquipo(datos.local, deporte);
     if (datos.visitante) datos.visitante = await buscarOCrearEquipo(datos.visitante, deporte);
 
-    // 2. Limpiar árbitro vacío
-    if (datos.arbitro === "") {
-        datos.arbitro = null;
-    }
+    if (datos.arbitro === "") datos.arbitro = null;
 
     const actualizado = await Partido.findByIdAndUpdate(req.params.id, datos, { new: true });
     res.json({ message: "Partido actualizado", partido: actualizado });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Error al actualizar" });
   }
 });

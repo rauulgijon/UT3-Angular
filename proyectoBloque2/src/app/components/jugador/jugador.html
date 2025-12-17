@@ -22,22 +22,29 @@
         <div *ngIf="vistaActual === 'partidos'" class="section-wrapper">
             <header class="section-header">
                 <h2>Mis Encuentros</h2>
-                <p class="subtitle">Consulta tus próximos partidos y resultados históricos</p>
+                
+                <p class="subtitle" *ngIf="usuario.equipo">
+                    Jugando para: <b>{{ usuario.equipo.nombre || 'Tu Equipo' }}</b>
+                </p>
+                
+                <p class="subtitle warning" *ngIf="!usuario.equipo" style="color: #fbbf24;">
+                    ⚠️ No tienes equipo asignado. Ve a "Mi Perfil" para seleccionarlo.
+                </p>
             </header>
 
             <div class="matches-grid">
                 <div class="match-card" *ngFor="let partido of misPartidos">
                     <div class="card-top">
-                        <span class="match-date">{{ partido.fecha | date:'EEE, d MMM yyyy • HH:mm' }}</span>
-                        <span class="status-pill" [ngClass]="partido.resultado ? 'finished' : 'pending'">
-                            {{ partido.resultado ? 'FINALIZADO' : 'PROGRAMADO' }}
+                        <span class="match-date">{{ partido.fecha | date:'EEE, d MMM • HH:mm' }}</span>
+                        <span class="status-pill" [ngClass]="partido.resultado !== '-/-' ? 'finished' : 'pending'">
+                            {{ partido.resultado !== '-/-' ? 'FINALIZADO' : 'PENDIENTE' }}
                         </span>
                     </div>
 
                     <div class="match-versus">
                         <div class="team team-local">
-                            <div class="team-avatar">{{ partido.equipoLocal.charAt(0) }}</div>
-                            <span class="team-name">{{ partido.equipoLocal }}</span>
+                            <div class="team-avatar">{{ partido.local.nombre.charAt(0) }}</div>
+                            <span class="team-name">{{ partido.local.nombre }}</span>
                         </div>
                         
                         <div class="versus-divider">
@@ -45,24 +52,24 @@
                         </div>
 
                         <div class="team team-visitor">
-                            <div class="team-avatar">{{ partido.equipoVisitante.charAt(0) }}</div>
-                            <span class="team-name">{{ partido.equipoVisitante }}</span>
+                            <div class="team-avatar">{{ partido.visitante.nombre.charAt(0) }}</div>
+                            <span class="team-name">{{ partido.visitante.nombre }}</span>
                         </div>
                     </div>
 
-                    <div class="card-result" *ngIf="partido.resultado">
+                    <div class="card-result" *ngIf="partido.resultado !== '-/-'">
                         <span class="score">{{ partido.resultado }}</span>
                     </div>
-                    <div class="card-footer" *ngIf="!partido.resultado">
-                        <span class="pending-text">Resultado pendiente</span>
+                    <div class="card-footer" *ngIf="partido.resultado === '-/-'">
+                        <span class="pending-text">Resultado por definir</span>
                     </div>
                 </div>
             </div>
 
             <div *ngIf="misPartidos.length === 0" class="empty-state">
                 <div class="empty-icon">📅</div>
-                <h3>Sin partidos asignados</h3>
-                <p>Aún no tienes partidos programados en el calendario.</p>
+                <h3>Sin partidos</h3>
+                <p>Tu equipo no tiene partidos programados o aún no has seleccionado equipo.</p>
             </div>
         </div>
 
@@ -71,7 +78,7 @@
                 <div class="profile-header">
                     <div class="avatar-large">{{ usuario.username.charAt(0) }}</div>
                     <h3>{{ usuario.username }}</h3>
-                    <span class="role-badge">Jugador Oficial</span>
+                    <span class="role-badge">Jugador</span>
                 </div>
 
                 <div class="profile-body">
@@ -81,9 +88,19 @@
                     </div>
                     
                     <div class="input-group">
-                        <label>Deporte</label>
-                        <input type="text" [value]="usuario.deporte || 'No asignado'" disabled class="disabled-input">
-                        <small>Contacta con administración para cambiar tu disciplina.</small>
+                        <label>Teléfono</label>
+                        <input type="text" [(ngModel)]="usuario.telefono" placeholder="600 000 000">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Tu Equipo Actual</label>
+                        <select [(ngModel)]="equipoSeleccionado" class="team-select">
+                            <option value="">-- Sin Equipo --</option>
+                            <option *ngFor="let eq of listaEquipos" [value]="eq._id">
+                                {{ eq.nombre }} ({{ eq.deporte }})
+                            </option>
+                        </select>
+                        <small>Selecciona el equipo al que perteneces para ver tu calendario.</small>
                     </div>
                 </div>
 

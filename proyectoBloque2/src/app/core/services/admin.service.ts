@@ -42,6 +42,13 @@ export class AdminService {
   }
 
   // ==========================================
+  //      GESTIÓN DE EQUIPOS (NUEVO)
+  // ==========================================
+  obtenerEquipos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/equipos`);
+  }
+
+  // ==========================================
   //      GESTIÓN DE COMPETICIONES
   // ==========================================
   obtenerCompeticiones(): Observable<any[]> {
@@ -80,24 +87,20 @@ export class AdminService {
   }
 
   // ==========================================
-  // NUEVO: FUNCIONALIDAD JUGADORES / ARBITROS
+  //   RUTAS ESPECIALES (Árbitro y Jugador)
   // ==========================================
 
-  // Obtener partidos donde juega un usuario específico
-  // Si tu backend no tiene esta ruta exacta, deberás filtrar en el front o crearla en el back
-  obtenerMisPartidos(idUsuario: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/partidos/usuario/${idUsuario}`);
-  }
-
-  // Obtener partidos asignados a un árbitro
+  // Para el Árbitro
   obtenerPartidosArbitro(idArbitro: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/partidos/arbitro/${idArbitro}`);
   }
 
-  // Actualizar resultado (Acta del partido)
-  // Se usa actualizarPartido o una ruta especifica si la tienes
+  // Para el Jugador (NUEVO)
+  obtenerMisPartidos(idUsuario: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/partidos/jugador/${idUsuario}`);
+  }
+
   actualizarResultado(idPartido: string, resultado: string): Observable<any> {
-    // Reutilizamos actualizarPartido enviando solo el resultado
     return this.http.put(`${this.apiUrl}/partidos/${idPartido}`, { resultado });
   }
 }
