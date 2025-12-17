@@ -1,107 +1,112 @@
 // --- Variables del Tema "Night League" ---
-$bg-main: #0f172a;       // Azul muy oscuro
-$bg-surface: #1e293b;    // Azul oscuro (Tarjetas)
-$primary: #3b82f6;       // Azul brillante
-$accent: #10b981;        // Verde Esmeralda
-$text-main: #f1f5f9;     // Blanco
-$text-muted: #94a3b8;    // Gris
-$shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+$bg-main: #0f172a;       
+$bg-surface: #1e293b;    
+$primary: #3b82f6;       
+$accent: #10b981;        
+$danger: #ef4444;        // Color para el Logout
+$text-main: #f1f5f9;     
+$text-muted: #94a3b8;    
 
-// Contenedor principal
 .admin-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   min-height: 100vh;
   width: 100%;
   background-color: $bg-main;
   font-family: 'Segoe UI', Roboto, sans-serif;
   color: $text-main;
-  padding: 20px;
+  padding: 40px 20px;
+}
+
+// --- NUEVA CABECERA ---
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 20px;
 
   h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 800;
-    margin-bottom: 4rem; // Un poco más de espacio
-    text-align: center;
-    letter-spacing: -1px;
-    
+    margin: 0;
     background: linear-gradient(to right, $primary, $accent);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: $primary; 
+  }
+
+  // Estilo Botón Logout
+  .btn-logout {
+    background: transparent;
+    border: 2px solid $danger;
+    color: $danger;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:hover {
+      background: $danger;
+      color: white;
+      box-shadow: 0 0 15px rgba($danger, 0.4);
+    }
   }
 }
 
 // Contenedor de botones
 .admin-buttons {
   display: grid;
-  // CAMBIO: Forzamos 5 columnas iguales para que entren en una línea
-  grid-template-columns: repeat(5, 1fr); 
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 25px;
   width: 100%;
-  // CAMBIO: Aumentamos el ancho máximo para que quepan los 5 botones
   max-width: 1200px; 
 }
 
-// Estilo del botón (Tipo Tarjeta)
 .admin-button {
   background-color: $bg-surface;
   color: $text-muted;
-  padding: 2rem 1rem; // Ajuste de padding para que no sean tan altos
-  border-radius: 16px;
-  font-size: 1rem;
+  padding: 2rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1.1rem;
   font-weight: 700;
-  border: 1px solid rgba($primary, 0.2);
-  outline: none;
+  border: 1px solid rgba(255,255,255,0.05);
   cursor: pointer;
-  
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
   text-transform: uppercase;
   letter-spacing: 1px;
   
-  // Para centrar el texto si se rompe en dos líneas en pantallas medianas
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  gap: 10px;
 
   &:hover {
     transform: translateY(-5px);
     background-color: lighten($bg-surface, 5%);
     color: $primary;
     border-color: $primary;
-    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.6), 
-                0 0 15px rgba($primary, 0.3);
-  }
-
-  &:active {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
   }
 }
 
-// Responsive: Ajustes para pantallas más pequeñas
-@media (max-width: 1024px) {
-  .admin-buttons {
-    // En tablets, permitimos que bajen de línea si no caben
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+// Responsive
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
   }
-}
-
-@media (max-width: 600px) {
-  .admin-container h1 {
-    font-size: 2rem;
-  }
-  
   .admin-buttons {
-    // En móvil, una sola columna
     grid-template-columns: 1fr;
-  }
-  
-  .admin-button {
-    padding: 1.5rem; // Botones más compactos en móvil
   }
 }
