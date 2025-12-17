@@ -1,0 +1,410 @@
+// --- VARIABLES DE TEMA "NIGHT LEAGUE" ---
+$bg-deep: #0f172a;        // Fondo muy oscuro
+$bg-card: #1e293b;        // Fondo tarjetas
+$primary: #3b82f6;        // Azul eléctrico
+$primary-glow: rgba(59, 130, 246, 0.5);
+$accent: #10b981;         // Verde neón
+$danger: #ef4444;
+$text-main: #f8fafc;
+$text-muted: #94a3b8;
+$gradient-card: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+
+// Configuración global
+.jugador-layout {
+    min-height: 100vh;
+    background-color: $bg-deep;
+    // Imagen de fondo sutil o patrón (opcional)
+    background-image: radial-gradient(circle at 10% 20%, rgba($primary, 0.08) 0%, transparent 20%),
+                      radial-gradient(circle at 90% 80%, rgba($accent, 0.05) 0%, transparent 20%);
+    color: $text-main;
+    font-family: 'Inter', system-ui, sans-serif;
+    padding-bottom: 40px;
+}
+
+// --- NAVBAR ESTILO CRISTAL (Glassmorphism) ---
+.glass-navbar {
+    position: sticky;
+    top: 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    padding: 1rem 2rem;
+    
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px); // Efecto borroso detrás
+    -webkit-backdrop-filter: blur(12px);
+    
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            .highlight { color: $primary; }
+        }
+
+        .user-badge {
+            background: rgba($primary, 0.1);
+            color: $primary;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba($primary, 0.2);
+        }
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 10px;
+
+        button {
+            background: transparent;
+            border: none;
+            color: $text-muted;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.05);
+                color: $text-main;
+            }
+
+            &.active {
+                background: $primary;
+                color: white;
+                box-shadow: 0 4px 15px $primary-glow;
+            }
+
+            &.btn-logout {
+                margin-left: 20px;
+                &:hover { color: $danger; background: rgba($danger, 0.1); }
+            }
+        }
+    }
+}
+
+// --- CONTENEDOR PRINCIPAL ---
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+// Header de sección
+.section-header {
+    margin-bottom: 2rem;
+    h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(to right, #fff, $text-muted);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+        color: $text-muted;
+        font-size: 1rem;
+    }
+}
+
+// --- GRID DE PARTIDOS ---
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 30px;
+}
+
+.match-card {
+    background: $gradient-card;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    // Hover Effect: Levantar tarjeta y brillo
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        border-color: rgba($primary, 0.3);
+    }
+
+    // Cabecera de tarjeta
+    .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+
+        .match-date {
+            font-size: 0.85rem;
+            color: $text-muted;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pill {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            &.pending {
+                background: rgba(234, 179, 8, 0.15); // Amarillo
+                color: #fbbf24;
+            }
+            &.finished {
+                background: rgba($accent, 0.15);
+                color: $accent;
+            }
+        }
+    }
+
+    // Enfrentamiento (Versus)
+    .match-versus {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+
+            .team-avatar {
+                width: 50px;
+                height: 50px;
+                background: linear-gradient(135deg, $primary, darken($primary, 20%));
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                font-weight: 800;
+                color: white;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            }
+
+            .team-name {
+                font-weight: 700;
+                font-size: 1.1rem;
+                text-align: center;
+                line-height: 1.2;
+            }
+        }
+
+        .versus-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            
+            .vs-text {
+                font-weight: 900;
+                color: rgba($text-muted, 0.3);
+                font-size: 1.2rem;
+                font-style: italic;
+            }
+        }
+    }
+
+    // Resultados
+    .card-result {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        
+        .score {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: $text-main;
+            text-shadow: 0 0 20px rgba($primary, 0.3);
+        }
+    }
+
+    .card-footer {
+        text-align: center;
+        margin-top: 10px;
+        .pending-text {
+            color: rgba($text-muted, 0.5);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+    }
+}
+
+// --- ESTILO PERFIL ---
+.profile-center {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.profile-card {
+    background: $bg-card;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 30px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+
+        .avatar-large {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, $accent, darken($accent, 15%));
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 800;
+            color: $bg-deep;
+            box-shadow: 0 0 25px rgba($accent, 0.4);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .role-badge {
+            background: rgba($text-muted, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: $text-muted;
+        }
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: $text-muted;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: 0.3s;
+
+            &:focus {
+                outline: none;
+                border-color: $primary;
+                box-shadow: 0 0 0 3px rgba($primary, 0.2);
+            }
+        }
+
+        .disabled-input {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        small {
+            color: rgba($text-muted, 0.5);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: block;
+        }
+    }
+
+    .btn-save-glow {
+        width: 100%;
+        padding: 16px;
+        background: $primary;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba($primary, 0.4);
+
+        &:hover {
+            transform: translateY(-2px);
+            background: lighten($primary, 5%);
+            box-shadow: 0 10px 25px rgba($primary, 0.6);
+        }
+    }
+}
+
+// --- UTILIDADES ---
+.empty-state {
+    text-align: center;
+    padding: 60px;
+    color: $text-muted;
+    background: rgba(255,255,255,0.02);
+    border-radius: 20px;
+    border: 2px dashed rgba(255,255,255,0.05);
+    
+    .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+    h3 { color: $text-main; margin-bottom: 0.5rem; }
+}
+
+// Animación de entrada
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .glass-navbar {
+        flex-direction: column;
+        gap: 15px;
+        border-radius: 0 0 20px 20px;
+        width: 100%;
+        top: 0;
+    }
+    .matches-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,3 +1,67 @@
 <div class="arbitro-container">
-    <h1>Árbitros</h1>
+    <header class="arbitro-header">
+        <h1>Panel Arbitral | {{ usuario.username }}</h1>
+        <button (click)="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+    </header>
+
+    <div class="content-wrapper">
+        <h3>Partidos Asignados</h3>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Encuentro</th>
+                        <th>Deporte</th>
+                        <th>Resultado Actual</th>
+                        <th style="text-align: center;">Acta</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let p of partidosAsignados">
+                    <td data-label="Fecha">{{ p.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td data-label="Encuentro" class="match-teams">{{ p.equipoLocal }} <b>VS</b> {{ p.equipoVisitante }}
+                    </td>
+                    <td data-label="Deporte">{{ p.deporte || '-' }}</td>
+                    <td data-label="Estado">
+                        <span class="badge" [ngClass]="p.resultado ? 'done' : 'pending'">
+                            {{ p.resultado ? p.resultado : 'Pendiente' }}
+                        </span>
+                    </td>
+                    <td data-label="Acción" style="text-align: center;">
+                        <button class="btn-edit-acta" (click)="abrirActa(p)">
+                            📝 Rellenar / Editar
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+            <p *ngIf="partidosAsignados.length === 0" class="no-data">
+                No tienes partidos asignados actualmente.
+            </p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="mostrarModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Acta del Partido</h3>
+                <button class="close-x" (click)="mostrarModal = false">×</button>
+            </div>
+
+            <div class="modal-body">
+                <p class="teams-title">{{ partidoSeleccionado?.equipoLocal }} vs {{ partidoSeleccionado?.equipoVisitante
+                    }}</p>
+
+                <label>Resultado Final:</label>
+                <input type="text" [(ngModel)]="nuevoResultado" placeholder="Ej: 3 - 1" class="input-score">
+                <small>Introduce el marcador final del encuentro.</small>
+            </div>
+
+            <div class="modal-footer">
+                <button (click)="mostrarModal = false" class="btn-cancel">Cancelar</button>
+                <button (click)="guardarActa()" class="btn-confirm">Confirmar Resultado</button>
+            </div>
+        </div>
+    </div>
 </div>

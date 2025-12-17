@@ -1,3 +1,99 @@
-<div class="jugador-container">
-    <h1>Jugadores</h1>
+<div class="jugador-layout">
+    <nav class="glass-navbar">
+        <div class="nav-brand">
+            <span class="logo-text">Hola, <span class="highlight">{{ usuario.username }}</span></span>
+        </div>
+        
+        <div class="nav-links">
+            <button (click)="vistaActual = 'partidos'" [class.active]="vistaActual === 'partidos'">
+                <span class="icon">⚽</span> Mis Partidos
+            </button>
+            <button (click)="vistaActual = 'perfil'" [class.active]="vistaActual === 'perfil'">
+                <span class="icon">👤</span> Mi Perfil
+            </button>
+            <button (click)="cerrarSesion()" class="btn-logout">
+                <span class="icon">🚪</span> Salir
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-container fade-in">
+        
+        <div *ngIf="vistaActual === 'partidos'" class="section-wrapper">
+            <header class="section-header">
+                <h2>Mis Encuentros</h2>
+                <p class="subtitle">Consulta tus próximos partidos y resultados históricos</p>
+            </header>
+
+            <div class="matches-grid">
+                <div class="match-card" *ngFor="let partido of misPartidos">
+                    <div class="card-top">
+                        <span class="match-date">{{ partido.fecha | date:'EEE, d MMM yyyy • HH:mm' }}</span>
+                        <span class="status-pill" [ngClass]="partido.resultado ? 'finished' : 'pending'">
+                            {{ partido.resultado ? 'FINALIZADO' : 'PROGRAMADO' }}
+                        </span>
+                    </div>
+
+                    <div class="match-versus">
+                        <div class="team team-local">
+                            <div class="team-avatar">{{ partido.equipoLocal.charAt(0) }}</div>
+                            <span class="team-name">{{ partido.equipoLocal }}</span>
+                        </div>
+                        
+                        <div class="versus-divider">
+                            <span class="vs-text">VS</span>
+                        </div>
+
+                        <div class="team team-visitor">
+                            <div class="team-avatar">{{ partido.equipoVisitante.charAt(0) }}</div>
+                            <span class="team-name">{{ partido.equipoVisitante }}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-result" *ngIf="partido.resultado">
+                        <span class="score">{{ partido.resultado }}</span>
+                    </div>
+                    <div class="card-footer" *ngIf="!partido.resultado">
+                        <span class="pending-text">Resultado pendiente</span>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="misPartidos.length === 0" class="empty-state">
+                <div class="empty-icon">📅</div>
+                <h3>Sin partidos asignados</h3>
+                <p>Aún no tienes partidos programados en el calendario.</p>
+            </div>
+        </div>
+
+        <div *ngIf="vistaActual === 'perfil'" class="section-wrapper profile-center">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar-large">{{ usuario.username.charAt(0) }}</div>
+                    <h3>{{ usuario.username }}</h3>
+                    <span class="role-badge">Jugador Oficial</span>
+                </div>
+
+                <div class="profile-body">
+                    <div class="input-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" [(ngModel)]="usuario.email" placeholder="tu@email.com">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Deporte</label>
+                        <input type="text" [value]="usuario.deporte || 'No asignado'" disabled class="disabled-input">
+                        <small>Contacta con administración para cambiar tu disciplina.</small>
+                    </div>
+                </div>
+
+                <div class="profile-footer">
+                    <button class="btn-save-glow" (click)="guardarPerfil()">
+                        Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

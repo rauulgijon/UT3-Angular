@@ -186,6 +186,18 @@ app.delete("/api/competiciones/:id", async (req, res) => {
 // ----------------------------------------------------
 // RUTAS DE PARTIDOS
 // ----------------------------------------------------
+
+// Ruta específica para que el árbitro vea SUS partidos
+app.get("/api/partidos/arbitro/:id", async (req, res) => {
+  try {
+    const partidos = await Partido.find({ arbitro: req.params.id })
+      .populate('local', 'nombre escudo')
+      .populate('visitante', 'nombre escudo');
+    res.json(partidos);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener partidos del árbitro" });
+  }
+});
 app.get("/api/partidos/:competicionId", async (req, res) => {
   try {
     // IMPORTANTE: Como has cambiado Partido.js para usar referencias,
