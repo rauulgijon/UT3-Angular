@@ -1,12 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router'; // <--- IMPORTANTE: Necesario para que funcione el botón de volver
 import { AdminService } from '../../../core/services/admin.service';
 
 @Component({
     selector: 'app-usuarios-admin',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, RouterModule], // <--- IMPORTANTE: Añadirlo aquí también
     templateUrl: './usuariosAdmin.html',
     styleUrl: './usuariosAdmin.scss'
 })
@@ -17,18 +18,17 @@ export class UsuariosAdminComponent implements OnInit {
     listaUsuarios: any[] = [];
     usuariosFiltrados: any[] = [];
     busqueda: string = '';
-    mostrarFormulario: boolean = false;
     
-    // Variable para saber si estamos editando (tendrá el ID) o creando (será null)
+    mostrarFormulario: boolean = false;
     idEdicion: string | null = null;
 
-    nuevoUsuario = {
+    nuevoUsuario: any = {
         username: '',
         email: '',
         password: '',
         rol: 'jugador',
-        dni: '',
         deporte: '',
+        dni: '',
         telefono: ''
     };
 
@@ -42,7 +42,7 @@ export class UsuariosAdminComponent implements OnInit {
                 this.listaUsuarios = data;
                 this.filtrar();
             },
-            error: (e) => console.error('Error:', e)
+            error: (e) => console.error('Error al cargar usuarios:', e)
         });
     }
 
@@ -58,68 +58,59 @@ export class UsuariosAdminComponent implements OnInit {
         }
     }
 
-    // Función unificada para Guardar (Crear o Editar)
     guardar() {
-        if (!this.nuevoUsuario.username || !this.nuevoUsuario.email) {
-            alert('Usuario y Email son obligatorios');
+        if (!this.nuevoUsuario.username || !this.nuevoUsuario.email || (!this.idEdicion && !this.nuevoUsuario.password)) {
+            alert('Usuario, Email y Contraseña son obligatorios');
             return;
         }
 
         if (this.idEdicion) {
-            // --- MODO EDICIÓN ---
+            // Si no se escribe contraseña nueva, la quitamos del objeto para no enviarla vacía
+            if (!this.nuevoUsuario.password) {
+                delete this.nuevoUsuario.password;
+            }
+            
             this.adminService.actualizarUsuario(this.idEdicion, this.nuevoUsuario).subscribe({
-                next: () => {
-                    alert('Usuario actualizado correctamente');
-                    this.cerrarFormulario();
-                    this.cargarUsuarios();
+                next: () => { 
+                    this.cerrarFormulario(); 
+                    this.cargarUsuarios(); 
                 },
-                error: (e) => alert('Error al actualizar')
+                error: (e) => alert('Error al actualizar usuario')
             });
         } else {
-            // --- MODO CREACIÓN ---
-            if (!this.nuevoUsuario.password) {
-                alert('La contraseña es obligatoria para nuevos usuarios');
-                return;
-            }
             this.adminService.crearUsuario(this.nuevoUsuario).subscribe({
-                next: () => {
-                    alert('Usuario creado correctamente');
-                    this.cerrarFormulario();
-                    this.cargarUsuarios();
+                next: () => { 
+                    this.cerrarFormulario(); 
+                    this.cargarUsuarios(); 
                 },
-                error: (e) => alert('Error al crear')
+                error: (e) => alert('Error al crear usuario')
             });
         }
     }
 
-    // Cargar datos en el formulario para editar
-    editar(usuario: any) {
-        this.idEdicion = usuario._id; // Guardamos el ID que estamos editando
-        this.nuevoUsuario = { ...usuario }; // Copiamos los datos al formulario
-        this.nuevoUsuario.password = ''; // Por seguridad, limpiamos la contraseña (opcional)
-        this.mostrarFormulario = true; // Abrimos el formulario
+    editar(item: any) {
+        this.idEdicion = item._id;
+        // Copiamos el objeto para no modificar la tabla directamente
+        this.nuevoUsuario = { ...item, password: '' }; 
+        this.mostrarFormulario = true;
     }
 
     borrar(id: string) {
-        if(confirm('¿Borrar usuario permanentemente?')) {
+        if(confirm('¿Estás seguro de eliminar este usuario?')) {
             this.adminService.borrarUsuario(id).subscribe(() => this.cargarUsuarios());
         }
     }
 
     cerrarFormulario() {
         this.mostrarFormulario = false;
-        this.idEdicion = null; // Resetear modo edición
-        this.limpiarModelo();
-    }
-
-    limpiarModelo() {
+        this.idEdicion = null;
         this.nuevoUsuario = {
             username: '',
             email: '',
             password: '',
             rol: 'jugador',
-            dni: '',
             deporte: '',
+            dni: '',
             telefono: ''
         };
     }

@@ -1,12 +1,9 @@
 <div class="arbitros-admin-container">
     
-    <div class="header-actions" style="margin-bottom: 20px;">
-        <a routerLink="/admin" class="btn-back" style="text-decoration: none; color: #94a3b8; font-weight: bold; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: color 0.2s;">
-            ⬅ Volver al Panel
-        </a>
+    <div class="header-row">
+        <h1>Gestión de Árbitros</h1>
+        <a routerLink="/admin" class="btn-back">⬅ Volver al Panel</a>
     </div>
-
-    <h2>Gestión de Árbitros</h2>
 
     <button class="btn-add" (click)="mostrarFormulario = true">
         + Registrar Nuevo Árbitro
@@ -34,8 +31,8 @@
                     
                     <td>
                         <div class="contact-info">
-                            <span>📧 {{ a.email }}</span>
-                            <span *ngIf="a.telefono">📱 {{ a.telefono }}</span>
+                            <span>email: {{ a.email }}</span>
+                            <span *ngIf="a.telefono">teléfono: {{ a.telefono }}</span>
                         </div>
                     </td>
 
@@ -87,9 +84,8 @@
                     <select [(ngModel)]="nuevoArbitro.deporte" name="deporte">
                         <option value="">-- General / Varios --</option>
                         <option value="Fútbol">Fútbol</option>
-                        <option value="Baloncesto">Baloncesto</option>
-                        <option value="Tenis">Tenis</option>
-                        <option value="Voleibol">Voleibol</option>
+                        <option value="Brawl Stars">Brawl Stars</option>
+                        <option value="Call of Duty">Call of Duty</option>
                     </select>
                 </div>
 
